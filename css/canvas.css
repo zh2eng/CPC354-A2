@@ -1,0 +1,76 @@
+.canvas {
+    border: 0.325rem solid #000000;
+	border-radius: 1.25rem;
+  	background-color: rgb(255, 255, 255, 0.5);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: min-content;
+}
+
+#gl-canvas{
+	padding-bottom: 1rem;
+}
+
+.canvas, #gl-canvas{
+	width: 96%;
+}
+
+.canvas-header{
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.625rem;
+	width: 100%;
+}
+
+.canvas-buttons{
+	display: flex;
+	gap: 0.125rem;
+	margin-right: 0.1rem;
+}
+
+h1
+{
+	font-family: 'ADLaM Display', cursive;
+    font-size: 2.25rem;
+	text-align: left;
+	color: #000a4d;
+}
+
+.circle
+{
+	width: 1.25rem;
+	height: 1.25rem;
+	border-radius: 50%;
+	display: inline-block;
+	margin: 0.625rem 0 0 0.625rem;
+}
+
+.base-btn
+{
+    border: none;
+    color: white;
+    padding: 0.525rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin: 0.25rem 0.125rem;
+    cursor: pointer;
+    border-radius: 0.75rem;
+}
+
+.start-btn
+{
+    background-color: #126715;
+}
+
+.stop-btn
+{
+    background-color: #f44336;
+}
+
+.reset-btn
+{
+	background-color: #0414c5;
+}

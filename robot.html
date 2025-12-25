@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CPC354 Robot Arm</title>
+
+        <script type="text/javascript" src="angleCommon/webgl-utils.js"></script>
+        <script type="text/javascript" src="angleCommon/initShaders.js"></script>
+        <script type="text/javascript" src="angleCommon/MV.js"></script>
+
+        <script type="text/javascript" src="javascript/Variables.js"></script>
+        <script type="text/javascript" src="javascript/Functions.js"></script>
+        <script type="text/javascript" src="javascript/joint.js"></script>
+        <script type="text/javascript" src="javascript/arm.js"></script>
+        <script type="text/javascript" src="javascript/gripper.js"></script>
+        <script type="text/javascript" src="javascript/ConfigGL.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="css/canvas.css" />
+        <link rel="stylesheet" type="text/css" href="css/menus.css" />
+
+        <!-- Define the vertex shader -->
+        <script id="vertex-shader" type="x-shader/x-vertex">
+            // Declare the global variable(s) for draw calls
+            uniform mat4 projectionMatrix;
+            uniform mat4 modelViewMatrix;
+
+            // Declare the input variable(s) to receive per-vertex data from the application
+            attribute vec4 vPosition;
+            attribute vec4 vColor;
+
+            // Declare the varying variable(s) to pass data to the fragment shader
+            varying vec4 fColor;
+
+            void main()
+            {
+      	        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+      	        fColor = vColor;
+            }
+        </script>
+
+        <!-- Define the fragment shader -->
+        <script id="fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
+            varying vec4 fColor;
+
+            void main()
+            {
+      	        gl_FragColor = fColor;
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="left-side">
+            <h1>CPC354 - Robot Arm</h1>
+            <div class="menus">
+
+            </div>
+        </div>
+        <div class="canvas">
+            <div class="canvas-header">
+                <div class="decorative">
+                    <div class="circle" style="background-color: #dd1f11"></div>
+                    <div class="circle" style="background-color: #126715"></div>
+                    <div class="circle" style="background-color: #0414c5"></div>
+                </div>
+                <div class="canvas-buttons">
+                    <button type="button" id="reset" class="base-btn reset-btn">
+                        <span>&#x27F3;</span> Reset
+                    </button>
+                    <button type="button" id="toggleButton" class="base-btn start-btn">
+                        <span>&#9654;</span> Start
+                    </button>
+                </div>
+            </div>
+            <canvas id="gl-canvas" width="1280" height="720">
+                Error: your browser doesn't support the HTML5 canvas element
+            </canvas>
+        </div>
+    </body>
+</html>
