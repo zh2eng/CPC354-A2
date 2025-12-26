@@ -92,10 +92,10 @@ function render() {
 
     setupRobotArm();
     modelViewMatrix = mat4();
-    modelViewMatrix = mult(modelViewMatrix, translate(6, -7, -30));
+    modelViewMatrix = mult(modelViewMatrix, translate(7, -5, -30));
     modelViewMatrix = mult(modelViewMatrix, rotateX(45));
     modelViewMatrix = mult(modelViewMatrix, rotateY(45));
-    modelViewMatrix = mult(modelViewMatrix, scalem(0.5, 0.5, 0.5));
+    modelViewMatrix = mult(modelViewMatrix, scalem(0.2, 0.2, 0.2));
     drawCube();
 
     //Only request new frame if animation is running
