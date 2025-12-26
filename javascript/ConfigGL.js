@@ -85,8 +85,8 @@ function render() {
     // Clear the color buffer and the depth buffer before rendering a new frame
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // Pass a 4x4 orthogonal projection matrix to the shader
-    projectionMatrix = ortho(-20, 20, -12, 12, 0.1, 100);
+    // Pass a 4x4 perspective projection matrix to the shader
+    projectionMatrix = perspective(45, canvas.width/canvas.height, 0.1, 100);
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
     setupRobotArm();
@@ -100,9 +100,9 @@ function render() {
 setupRobotArm = function() {
     // Create the model view matrix
     modelViewMatrix = mat4();
-    modelViewMatrix = mult(modelViewMatrix, translate(-15.0, -8.0, -30.0));
+    modelViewMatrix = mult(modelViewMatrix, translate(0, -8.0, -50.0));
     modelViewMatrix = mult(modelViewMatrix, rotateY(0));
-    modelViewMatrix = mult(modelViewMatrix, scalem(0.4,0.4,0.4))
+    modelViewMatrix = mult(modelViewMatrix, scalem(0.25,0.25,0.25))
 
     pushMatrix();
     drawJoint();
