@@ -32,6 +32,11 @@ function drawGripper() {
     gl.drawArrays(gl.TRIANGLES, gripperStart, gripperCount);
 }
 
+function drawCube() {
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.drawArrays(gl.TRIANGLES, cubeStart, cubeCount);
+}
+
 function pushMatrix() {
     let m = mat4();
     for (let i = 0; i < 16; i++) m[i] = modelViewMatrix[i];
