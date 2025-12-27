@@ -36,7 +36,8 @@ body
 .menus-label
 {
 	font-family: 'ADLaM Display', cursive;
-	font-size: 1.3rem;
+	font-size: 1.1rem;
+    font-weight: bold;
 	text-align: left;
 	color: #050505;
 }

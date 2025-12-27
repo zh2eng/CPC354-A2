@@ -18,6 +18,10 @@ function getUIElement() {
     canvas = document.getElementById("gl-canvas");
     toggleButton = document.getElementById('toggleButton');
     resetButton = document.getElementById('reset');
+    worldSlider = document.getElementById('worldSlider');
+    worldTextbox = document.getElementById('worldTextbox');
+    gripperSlider = document.getElementById('gripperSlider');
+    gripperTextbox = document.getElementById('gripperTextbox');
     for (let i = 0; i < 4; i++) {
         armRadio[i] = document.getElementById(armRadioLabels[i]);
     }
@@ -39,6 +43,72 @@ function getUIElement() {
         }
         doAnimation = !doAnimation
     });
+
+    // Keydown event listener for arm control
+    document.addEventListener('keydown', function(event) {
+        if (event.code === 'Digit1') index = 0;
+        else if (event.code === 'Digit2') index = 1;
+        else if (event.code === 'Digit3') index = 2;
+        else if (event.code === 'Digit4') index = 3;
+        else if (event.code === 'KeyW') {
+            armTextbox.value = parseFloat(armTextbox.value) - 1;
+            armTextbox.dispatchEvent(new Event('input'));
+        }
+        else if (event.code === 'KeyA') {
+            jointTextbox.value = parseFloat(jointTextbox.value) - 1;
+            jointTextbox.dispatchEvent(new Event('input'));
+        }
+        else if (event.code === 'KeyS') {
+            armTextbox.value = parseFloat(armTextbox.value) + 1;
+            armTextbox.dispatchEvent(new Event('input'));
+        }
+        else if (event.code === 'KeyD') {
+            jointTextbox.value = parseFloat(jointTextbox.value) + 1;
+            jointTextbox.dispatchEvent(new Event('input'));
+        }
+        else if (event.code === 'KeyG') {
+            gripperTextbox.value = parseFloat(gripperTextbox.value) + 1;
+            gripperTextbox.dispatchEvent(new Event('input'));
+        }
+        else if (event.code === 'KeyR') {
+            gripperTextbox.value = parseFloat(gripperTextbox.value) - 1;
+            gripperTextbox.dispatchEvent(new Event('input'));
+        }
+
+        if ( index === 0 || index === 1 || index === 2 || index === 3 ){
+            armRadio[index].checked = true;
+            armRadio[index].dispatchEvent(new Event('change'));
+        }
+
+    })
+
+    // Event listener for world Scale
+    worldSlider.addEventListener('input', function () {
+        worldTextbox.value = parseFloat(worldSlider.value);
+        worldScale = parseFloat(worldSlider.value)/10;
+        render();
+    })
+
+    worldTextbox.addEventListener('input', function () {
+        worldSlider.value = parseFloat(worldTextbox.value);
+        worldScale = parseFloat(worldSlider.value)/10;
+        render();
+    })
+
+    // Event listener for gripper
+    gripperSlider.addEventListener('input', function () {
+        gripperTextbox.value = parseFloat(gripperSlider.value);
+        gripperRotation = parseFloat(gripperSlider.value)-20;
+        render();
+    })
+
+    gripperTextbox.addEventListener('input', function () {
+        if (gripperTextbox.value >= 55) gripperTextbox.value = 55;
+        else if (gripperTextbox.value <= 0) gripperTextbox.value = 0;
+        gripperSlider.value = parseFloat(gripperTextbox.value);
+        gripperRotation = parseFloat(gripperTextbox.value)-20;
+        render();
+    })
 
     // Event listener for the arm radio buttons
     for (let i = 0; i < armRadio.length; i++) {
@@ -170,9 +240,9 @@ function render() {
     setupRobotArm();
     modelViewMatrix = mat4();
     modelViewMatrix = mult(modelViewMatrix, translate(7, -5, -30));
-    modelViewMatrix = mult(modelViewMatrix, rotateX(45));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(45));
-    modelViewMatrix = mult(modelViewMatrix, scalem(0.2, 0.2, 0.2));
+    modelViewMatrix = mult(modelViewMatrix, rotateX(15));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(10));
+    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
     drawCube();
 
     //Only request new frame if animation is running
@@ -186,7 +256,7 @@ setupRobotArm = function() {
     modelViewMatrix = mat4();
     modelViewMatrix = mult(modelViewMatrix, translate(0, -8.0, -50.0));
     modelViewMatrix = mult(modelViewMatrix, rotateY(baseRotation));
-    modelViewMatrix = mult(modelViewMatrix, scalem(0.25 ,0.25,0.25))
+    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
 
     pushMatrix();
     drawJoint();
@@ -228,7 +298,7 @@ setupRobotArm = function() {
     drawGripper();
 
     // === RIGHT GRIPPER ===
-    modelViewMatrix = mult(modelViewMatrix, scalem(-1,1,1));
+    modelViewMatrix = mult(modelViewMatrix, scalem(-1, 1, 1));
     // 2 times left gripper to balance the gripper purpose
     modelViewMatrix = mult(modelViewMatrix, rotateZ(gripperRotation*2));
     drawGripper();
