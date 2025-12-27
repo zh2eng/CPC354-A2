@@ -32,3 +32,47 @@ body
 .suspendedMenu{
     display: none;
 }
+
+.menus-label
+{
+	font-family: 'ADLaM Display', cursive;
+	font-size: 1.3rem;
+	text-align: left;
+	color: #050505;
+}
+
+.instruction
+{
+	font-family: 'ADLaM Display', cursive;
+	font-size: 1rem;
+	text-align: left;
+	color: #050505;
+}
+
+.radio-labels-row { 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    margin-top: 0.3rem;
+}
+
+.class-range
+{
+    display: flex;
+}
+
+.range-input
+{
+    font-family: 'ADLaM Display', cursive;
+    font-size: 0.8rem;
+    color: #050505;
+    width: 80%;
+    margin-left: 0.125rem;
+}
+
+.text-input
+{
+    border-radius: 0.2rem;
+    width: 10%; 
+    height: 1.25rem;
+    margin-left: 0.3125rem;
+}

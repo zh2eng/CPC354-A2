@@ -56,7 +56,69 @@
         <div class="left-side">
             <h1>CPC354 - Robot Arm</h1>
             <div class="menus">
-
+                <label class="menus-label">Robot rotation</label><br>
+                <div class="radio-labels-row">
+                    <div>
+                        <input type="radio" id="base" name="robotArm" checked />
+                        <label for="base" class="instruction">Base</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="lowerArm" name="robotArm"/>
+                        <label for="lowerArm" class="instruction">Lower Arm</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="middleArm" name="robotArm"/>
+                        <label for="middleArm" class="instruction">Middle Arm</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="upperArm" name="robotArm"/>
+                        <label for="upperArm" class="instruction">Upper Arm</label>
+                    </div>
+                </div><br>
+                <label for="jointRotation" class="instruction">Joint Rotation</label>
+                <div class="class-range">
+                    <input
+                        type="range"
+                        id="jointSlider"
+                        class="range-input"
+                        min="-180"
+                        max="180"
+                        value="0.0"
+                        step="1.0"
+                    />
+                    <input
+                        type="number"
+                        id="jointTextbox"
+                        class="text-input"
+                        min="-180"
+                        max="180"
+                        value="0.0"
+                        step="1.0"
+                    />
+                </div>
+                <div id="armLabel" style="display: none;"> 
+                    <label for="armRotation" class="instruction">Arm Rotation</label>
+                    <div class="class-range">
+                        <input
+                            type="range"
+                            id="armSlider"
+                            class="range-input"
+                            min="-110"
+                            max="110"
+                            value="0.0"
+                            step="1.0"
+                        />
+                        <input
+                            type="number"
+                            id="armTextbox"
+                            class="text-input"
+                            min="-110"
+                            max="110"
+                            value="0.0"
+                            step="1.0"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
         <div class="canvas">

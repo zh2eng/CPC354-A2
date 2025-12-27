@@ -18,6 +18,14 @@ function getUIElement() {
     canvas = document.getElementById("gl-canvas");
     toggleButton = document.getElementById('toggleButton');
     resetButton = document.getElementById('reset');
+    for (let i = 0; i < 4; i++) {
+        armRadio[i] = document.getElementById(armRadioLabels[i]);
+    }
+    jointSlider = document.getElementById('jointSlider');
+    jointTextbox = document.getElementById('jointTextbox');
+    armLabel = document.getElementById('armLabel');
+    armSlider = document.getElementById('armSlider');
+    armTextbox = document.getElementById('armTextbox');
 
     // Event listener for the toggle button
     toggleButton.addEventListener('click', function () {
@@ -31,6 +39,75 @@ function getUIElement() {
         }
         doAnimation = !doAnimation
     });
+
+    // Event listener for the arm radio buttons
+    for (let i = 0; i < armRadio.length; i++) {
+        armRadio[i].addEventListener('change', function () {
+            armLabel.style.display = i === 0 ? 'none' : 'block';
+            if (armRadio[0].checked) {
+                jointSlider.value = baseRotation;
+                jointTextbox.value = baseRotation;
+            }
+            else if (armRadio[1].checked) {
+                armSlider.value = lowerArmRotation[0];
+                armTextbox.value = lowerArmRotation[0];
+                jointSlider.value = lowerArmRotation[1];
+                jointTextbox.value = lowerArmRotation[1];
+            }
+            else if (armRadio[2].checked) {
+                armSlider.value = middleArmRotation[0];
+                armTextbox.value = middleArmRotation[0];
+                jointSlider.value = middleArmRotation[1];
+                jointTextbox.value = middleArmRotation[1];
+            }
+            else if (armRadio[3].checked) {
+                armSlider.value = upperArmRotation[0];
+                armTextbox.value = upperArmRotation[0];
+                jointSlider.value = upperArmRotation[1];
+                jointTextbox.value = upperArmRotation[1];
+            }
+        });
+    }
+
+    // Event listener for the joint slider and textbox
+    jointSlider.addEventListener('input', function () {
+        jointTextbox.value = parseFloat(jointSlider.value);
+        if (armRadio[0].checked) baseRotation = parseFloat(jointSlider.value);
+        else if (armRadio[1].checked) lowerArmRotation[1] = parseFloat(jointSlider.value);
+        else if (armRadio[2].checked) middleArmRotation[1] = parseFloat(jointSlider.value);
+        else if (armRadio[3].checked) upperArmRotation[1] = parseFloat(jointSlider.value);
+        render()
+    })
+
+    jointTextbox.addEventListener('input', function () {
+        if (jointTextbox.value >= 180) jointTextbox.value = -180 + (jointTextbox.value % 180);
+        else if (jointTextbox.value <= -180) jointTextbox.value = 180 - (jointTextbox.value % 180);
+        jointSlider.value = parseFloat(jointTextbox.value);
+        if (armRadio[0].checked)  baseRotation = parseFloat(jointTextbox.value);
+        else if (armRadio[1].checked) lowerArmRotation[1] = parseFloat(jointTextbox.value);
+        else if (armRadio[2].checked) middleArmRotation[1] = parseFloat(jointTextbox.value);
+        else if (armRadio[3].checked) upperArmRotation[1] = parseFloat(jointTextbox.value);
+        render()
+    });
+
+    // Event listener for the arm slider and text box
+    armSlider.addEventListener('input', function () {
+        armTextbox.value = parseFloat(armSlider.value);
+        if (armRadio[1].checked) lowerArmRotation[0] = parseFloat(armSlider.value);
+        else if (armRadio[2].checked) middleArmRotation[0] = parseFloat(armSlider.value);
+        else if (armRadio[3].checked) upperArmRotation[0] = parseFloat(armSlider.value);
+        render()
+    })
+
+    armTextbox.addEventListener('input', function () {
+        if (armTextbox.value >= 110) armTextbox.value = 110;
+        else if (armTextbox.value <= -110) armTextbox.value = -110;
+        armSlider.value = parseFloat(armTextbox.value);
+        if (armRadio[1].checked) lowerArmRotation[0] = parseFloat(armTextbox.value);
+        else if (armRadio[2].checked) middleArmRotation[0] = parseFloat(armTextbox.value);
+        else if (armRadio[3].checked) upperArmRotation[0] = parseFloat(armTextbox.value);
+        render()
+    })
 }
 
 // Configure WebGL Settings

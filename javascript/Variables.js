@@ -49,3 +49,7 @@ var lowerArmRotation = [-20, 20]; // [arm angle, joint angle]
 var middleArmRotation = [-30, -50]; // [arm angle, joint angle]
 var upperArmRotation = [-60, -10]; // [arm angle, joint angle]
 var gripperRotation = 30; // gripper angle
+
+// Slider and textbox elements
+var armRadio = [], armLabel, armRadioLabels = ["base", "lowerArm", "middleArm", "upperArm"];
+var jointSlider, jointTextbox, armSlider, armTextbox;
