@@ -56,6 +56,12 @@ body
     margin-top: 0.3rem;
 }
 
+.position-labels-row { 
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    margin-top: 0.3rem;
+}
+
 .class-range
 {
     display: flex;

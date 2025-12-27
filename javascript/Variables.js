@@ -50,13 +50,18 @@ var middleArmRotation = [-30, -50]; // [arm angle, joint angle]
 var upperArmRotation = [-60, -10]; // [arm angle, joint angle]
 var gripperRotation = 5; // gripper angle
 
+// Variable for position of robot arm
+var robotPosition = [0, -8, -50];
+
 // Slider and textbox for world scale
 var worldScale = 0.25;
 var worldSlider, worldTextbox;
 
 // Slider and textbox for robot arm
 var armRadio = [], armLabel, armRadioLabels = ["base", "lowerArm", "middleArm", "upperArm"];
-var jointSlider, jointTextbox, armSlider, armTextbox;
+var positionRadio = [], positionLabel, positionRadioLabels = ["xPosition", "yPosition", "zPosition"];
+var index = 0, indexP = 0; // use for keydown function
+var jointSlider, jointTextbox, armSlider, armTextbox, positionSlider, positionTextbox;
 
 // Slider and textbox for gripper
 var gripperSlider, gripperTextbox;
