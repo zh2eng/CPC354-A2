@@ -7,46 +7,10 @@ window.onload = function init() {
     setupJoint();
     setupArm();
     setupGripper();
+    setupCube();
     // WebGL setups
     getUIElement();
     configWebGL();
-}
-
-// Retrieve all elements from HTML and store in the corresponding variables
-function getUIElement() {
-    canvas = document.getElementById("gl-canvas");
-    toggleButton = document.getElementById('toggleButton');
-    resetButton = document.getElementById('reset');
-    jointControls = document.getElementById('jointControls');
-    
-    // Event listener for the toggle button
-    toggleButton.addEventListener('click', function () {
-        if (!doAnimation) {
-            toggleButton.innerHTML = '<span>&#9724;</span> Start';
-            toggleButton.className = 'base-btn stop-btn';
-        }
-        else {
-            toggleButton.innerHTML = '<span>&#9654;</span> Start';
-            toggleButton.className = 'base-btn start-btn';
-        }
-        doAnimation = !doAnimation
-    });
-    // Event listener for the reset button
-    resetButton.addEventListener('click', function () {
-        // Reset animation state to initial state
-        for (const key in animationState){
-            animationState[key] = initialState[key];
-        }
-        render();
-    });
-
-    // Event listener for the joint controls
-    jointControls.addEventListener('input', function (event) {
-        const newValue = parseFloat(event.target.value);
-        const eventName = event.target.name + "Angle";
-        animationState[eventName] = newValue;
-        render();
-    });
 }
 
 // Configure WebGL Settings
@@ -109,79 +73,69 @@ function render() {
     projectionMatrix = perspective(45, canvas.width / canvas.height, 0.1, 100);
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
-    animUpdate();
+    setupRobotArm();
+    modelViewMatrix = mat4();
+    modelViewMatrix = mult(modelViewMatrix, translate(7, -5, -30));
+    modelViewMatrix = mult(modelViewMatrix, rotateX(15));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(10));
+    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
+    drawCube();
+
+    //Only request new frame if animation is running
+    if (doAnimation) requestAnimationFrame(render);
 }
 
-function animUpdate() {
-    // Clear the color buffer and the depth buffer before rendering a new frame
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    // Update animation variables
-
-    // Draw the robot arm
-    drawRobotArm();
-    // Render the next frame
-    animFrame = requestAnimationFrame(render);
-}
-
-drawRobotArm = function () {
-    // Destructure angles from animationState for easier access
-    const { 
-        lowerArmAngle, lowerArmJointAngle,
-        middleArmAngle, middleArmJointAngle,
-        upperArmAngle, upperArmJointAngle,
-        leftGripperJointAngle, rightGripperJointAngle
-    } = animationState;
-
+setupRobotArm = function () {
     // Create the model view matrix
     modelViewMatrix = mat4();
-    modelViewMatrix = mult(modelViewMatrix, translate(0, -8.0, -50.0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(0));
-    modelViewMatrix = mult(modelViewMatrix, scalem(0.25, 0.25, 0.25))
+    modelViewMatrix = mult(modelViewMatrix, translate(robotPosition[0], robotPosition[1], robotPosition[2]));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(baseRotation));
+    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
 
     pushMatrix();
-    drawComponent(jointStart, jointCount);
+    drawJoint();
 
     // === LOWER ARM ===
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(lowerArmAngle));
-    drawComponent(armStart, armCount);
+    modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(lowerArmRotation[0]));
+    drawArm();
 
     // === LOWER ARM JOINT ===
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 23.3, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(lowerArmJointAngle));
-    drawComponent(jointStart, jointCount);
+    modelViewMatrix = mult(modelViewMatrix, translate(jointTranslate));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(lowerArmRotation[1]));
+    drawJoint();
 
     // === MIDDLE ARM ===
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(middleArmAngle));
-    drawComponent(armStart, armCount);
+    modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(middleArmRotation[0]));
+    drawArm();
 
     // === MIDDLE ARM JOINT ===
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 23.3, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(middleArmJointAngle));
-    drawComponent(jointStart, jointCount);
+    modelViewMatrix = mult(modelViewMatrix, translate(jointTranslate));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(middleArmRotation[1]));
+    drawJoint();
 
     // === UPPER ARM ===
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(upperArmAngle));
-    drawComponent(armStart, armCount);
+    modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(upperArmRotation[0]));
+    drawArm();
 
     // === UPPER ARM JOINT ===
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 23.3, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmJointAngle));
-    drawComponent(jointStart, jointCount);
+    modelViewMatrix = mult(modelViewMatrix, translate(jointTranslate));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation[1]));
+    drawJoint();
 
     // === LEFT GRIPPER ===
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, scalem(-1, -1, -1));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(leftGripperJointAngle));
-    drawComponent(gripperStart, gripperCount);
+    modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
+    modelViewMatrix = mult(modelViewMatrix, scalem(-1,-1,-1));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(gripperRotation));
+    drawGripper();
 
     // === RIGHT GRIPPER ===
     modelViewMatrix = mult(modelViewMatrix, scalem(-1, 1, 1));
     // 2 times left gripper to balance the gripper purpose
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(rightGripperJointAngle));
-    drawComponent(gripperStart, gripperCount);
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(gripperRotation*2));
+    drawGripper();
 
     popMatrix();
 }
