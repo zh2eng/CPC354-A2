@@ -15,6 +15,7 @@
         <script type="text/javascript" src="javascript/arm.js"></script>
         <script type="text/javascript" src="javascript/gripper.js"></script>
         <script type="text/javascript" src="javascript/ConfigGL.js"></script>
+        <script type="text/javascript" src="javascript/animationFunctions.js"></script>
 
         <link rel="stylesheet" type="text/css" href="css/canvas.css" />
         <link rel="stylesheet" type="text/css" href="css/menus.css" />
@@ -55,7 +56,49 @@
         <div class="left-side">
             <h1>CPC354 - Robot Arm</h1>
             <div class="menus">
-
+                <h2>Joint control</h2>
+                <div id="jointControls">
+                    <div>
+                        <label for="lowerArm">Lower arm</label>
+                        <input type="range" name="lowerArm" min="-180" max="180" value="0" step="1"
+                        id="lowerArmSlider" title="Lower arm angle control" />
+                    </div>
+                                        <div>
+                        <label for="lowerArmJoint">Lower arm joint</label>
+                        <input type="range" name="lowerArmJoint" min="-180" max="180" value="0" step="1"
+                        id="lowerArmJointSlider" title="Lower arm joint angle control" />
+                    </div>
+                                        <div>
+                        <label for="middleArm">Middle arm</label>
+                        <input type="range" name="middleArm" min="-180" max="180" value="0" step="1"
+                        id="middleArmSlider" title="Middle arm angle control" />
+                    </div>
+                                        <div>
+                        <label for="middleArmJoint">Middle arm joint</label>
+                        <input type="range" name="middleArmJoint" min="-180" max="180" value="0" step="1"
+                        id="middleArmJointSlider" title="Middle arm joint angle control" />
+                    </div>
+                                        <div>
+                        <label for="upperArm">Upper arm</label>
+                        <input type="range" name="upperArm" min="-180" max="180" value="0" step="1"
+                        id="upperArmSlider" title="Upper arm angle control" />
+                    </div>
+                                        <div>
+                        <label for="upperArmJoint">Upper arm joint</label>
+                        <input type="range" name="upperArmJoint" min="-180" max="180" value="0" step="1"
+                        id="upperArmJointSlider" title="Upper arm joint angle control" />
+                    </div>
+                                        <div>
+                        <label for="leftGripperJoint">Left gripper joint</label>
+                        <input type="range" name="leftGripperJoint" min="-180" max="180" value="0" step="1"
+                        id="leftGripperJointSlider" title="Left gripper joint angle control" />
+                    </div>
+                                        <div>
+                        <label for="rightGripperJoint">Right gripper joint</label>
+                        <input type="range" name="rightGripperJoint" min="-180" max="180" value="0" step="1"
+                        id="rightGripperJointSlider" title="Right gripper joint angle control" />
+                    </div>
+                </div>
             </div>
         </div>
         <div class="canvas">

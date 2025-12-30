@@ -17,18 +17,35 @@ function getUIElement() {
     canvas = document.getElementById("gl-canvas");
     toggleButton = document.getElementById('toggleButton');
     resetButton = document.getElementById('reset');
-
+    jointControls = document.getElementById('jointControls');
+    
     // Event listener for the toggle button
     toggleButton.addEventListener('click', function () {
-        if(!doAnimation){
+        if (!doAnimation) {
             toggleButton.innerHTML = '<span>&#9724;</span> Start';
             toggleButton.className = 'base-btn stop-btn';
         }
-        else{
+        else {
             toggleButton.innerHTML = '<span>&#9654;</span> Start';
             toggleButton.className = 'base-btn start-btn';
         }
         doAnimation = !doAnimation
+    });
+    // Event listener for the reset button
+    resetButton.addEventListener('click', function () {
+        // Reset animation state to initial state
+        for (const key in animationState){
+            animationState[key] = initialState[key];
+        }
+        render();
+    });
+
+    // Event listener for the joint controls
+    jointControls.addEventListener('input', function (event) {
+        const newValue = parseFloat(event.target.value);
+        const eventName = event.target.name + "Angle";
+        animationState[eventName] = newValue;
+        render();
     });
 }
 
@@ -80,74 +97,91 @@ function configWebGL() {
 
 // Render the graphics for viewing
 function render() {
-    // run animation update if animation is ongoing
-    if (doAnimation) animation();
+    // Cancel any previously requested animation frame
+    if (doAnimation) {
+        doAnimation = false;
+        cancelAnimationFrame(animFrame);
+    }
     // Clear the color buffer and the depth buffer before rendering a new frame
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // Pass a 4x4 perspective projection matrix to the shader
-    projectionMatrix = perspective(45, canvas.width/canvas.height, 0.1, 100);
+    // Pass a perspective projection matrix to the shader
+    projectionMatrix = perspective(45, canvas.width / canvas.height, 0.1, 100);
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
-    setupRobotArm();
-
-    //Only request new frame if animation is running
-    if (doAnimation) requestAnimationFrame(render);
+    animUpdate();
 }
 
+function animUpdate() {
+    // Clear the color buffer and the depth buffer before rendering a new frame
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    // Update animation variables
 
+    // Draw the robot arm
+    drawRobotArm();
+    // Render the next frame
+    animFrame = requestAnimationFrame(render);
+}
 
-setupRobotArm = function() {
+drawRobotArm = function () {
+    // Destructure angles from animationState for easier access
+    const { 
+        lowerArmAngle, lowerArmJointAngle,
+        middleArmAngle, middleArmJointAngle,
+        upperArmAngle, upperArmJointAngle,
+        leftGripperJointAngle, rightGripperJointAngle
+    } = animationState;
+
     // Create the model view matrix
     modelViewMatrix = mat4();
     modelViewMatrix = mult(modelViewMatrix, translate(0, -8.0, -50.0));
     modelViewMatrix = mult(modelViewMatrix, rotateY(0));
-    modelViewMatrix = mult(modelViewMatrix, scalem(0.25,0.25,0.25))
+    modelViewMatrix = mult(modelViewMatrix, scalem(0.25, 0.25, 0.25))
 
     pushMatrix();
-    drawJoint();
+    drawComponent(jointStart, jointCount);
 
     // === LOWER ARM ===
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(-20));
-    drawArm();
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(lowerArmAngle));
+    drawComponent(armStart, armCount);
 
     // === LOWER ARM JOINT ===
     modelViewMatrix = mult(modelViewMatrix, translate(0, 23.3, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(20));
-    drawJoint();
+    modelViewMatrix = mult(modelViewMatrix, rotateY(lowerArmJointAngle));
+    drawComponent(jointStart, jointCount);
 
     // === MIDDLE ARM ===
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(-40));
-    drawArm();
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(middleArmAngle));
+    drawComponent(armStart, armCount);
 
     // === MIDDLE ARM JOINT ===
     modelViewMatrix = mult(modelViewMatrix, translate(0, 23.3, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(-50));
-    drawJoint();
+    modelViewMatrix = mult(modelViewMatrix, rotateY(middleArmJointAngle));
+    drawComponent(jointStart, jointCount);
 
     // === UPPER ARM ===
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(-50));
-    drawArm();
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(upperArmAngle));
+    drawComponent(armStart, armCount);
 
     // === UPPER ARM JOINT ===
     modelViewMatrix = mult(modelViewMatrix, translate(0, 23.3, 0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(50));
-    drawJoint();
+    modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmJointAngle));
+    drawComponent(jointStart, jointCount);
 
     // === LEFT GRIPPER ===
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0.0025, 0));
-    modelViewMatrix = mult(modelViewMatrix, scalem(-1,-1,-1));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(30));
-    drawGripper();
+    modelViewMatrix = mult(modelViewMatrix, scalem(-1, -1, -1));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(leftGripperJointAngle));
+    drawComponent(gripperStart, gripperCount);
 
     // === RIGHT GRIPPER ===
-    modelViewMatrix = mult(modelViewMatrix, scalem(-1,1,1));
+    modelViewMatrix = mult(modelViewMatrix, scalem(-1, 1, 1));
     // 2 times left gripper to balance the gripper purpose
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(60));
-    drawGripper();
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(rightGripperJointAngle));
+    drawComponent(gripperStart, gripperCount);
 
     popMatrix();
 }

@@ -17,19 +17,9 @@ function triangle(List, colorIndex, Vertex) {
     }
 }
 
-function drawArm() {
+function drawComponent(start, count){
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.drawArrays(gl.TRIANGLES, armStart, armCount);
-}
-
-function drawJoint() {
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.drawArrays(gl.TRIANGLES, jointStart, jointCount);
-}
-
-function drawGripper() {
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.drawArrays(gl.TRIANGLES, gripperStart, gripperCount);
+    gl.drawArrays(gl.TRIANGLES, start, count);
 }
 
 function pushMatrix() {

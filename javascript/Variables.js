@@ -23,9 +23,37 @@ var doAnimation = false; // flag to indicate if animation is running
 
 // Variables for the robot arms
 var points = [], colors = [];
-var armStart, armCount;
-var jointStart, jointCount;
-var gripperStart, gripperCount;
+// var armStart, armCount;
+// var armLength, armWidth, armHeight;
+// var jointStart, jointCount;
+// var jointLength, jointWidth, jointHeight;
+// var gripperStart, gripperCount;
+// var gripperLength, gripperWidth, gripperHeight;
+
+// Variables to control robot arm orientation
+// Initial angles for each part of the robot arm
+const initialState = {
+    lowerArmAngle: -20,
+    lowerArmJointAngle: 20,
+    middleArmAngle: -40,
+    middleArmJointAngle: -50,
+    upperArmAngle: -50,
+    upperArmJointAngle: 50,
+    leftGripperJointAngle: 30,
+    rightGripperJointAngle: 60
+}
+
+const animationState = {
+    lowerArmAngle: initialState.lowerArmAngle,
+    lowerArmJointAngle: initialState.lowerArmJointAngle,
+    middleArmAngle: initialState.middleArmAngle,
+    middleArmJointAngle: initialState.middleArmJointAngle,
+    upperArmAngle: initialState.upperArmAngle,
+    upperArmJointAngle: initialState.upperArmJointAngle,
+    leftGripperJointAngle: initialState.leftGripperJointAngle,
+    rightGripperJointAngle: initialState.rightGripperJointAngle
+}
+
 
 var stack = [];
 
