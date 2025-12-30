@@ -24,19 +24,37 @@ function getUIElement() {
 
     // Event listener for the toggle button
     toggleButton.addEventListener('click', function () {
-        if(!doAnimation){
+        if (!doAnimation) {
             toggleButton.innerHTML = '<span>&#9724;</span> Stop';
             toggleButton.className = 'base-btn stop-btn';
         }
-        else{
+        else {
             toggleButton.innerHTML = '<span>&#9654;</span> Start';
             toggleButton.className = 'base-btn start-btn';
         }
         doAnimation = !doAnimation
     });
 
+    resetButton.addEventListener('click', function () {
+        // Reset all variables to initial state
+        baseRotation = baseRotationInit;
+        lowerArmRotation = [...lowerArmRotationInit];
+        middleArmRotation = [...middleArmRotationInit];
+        upperArmRotation = [...upperArmRotationInit];
+        gripperRotation = gripperRotationInit;
+        robotPosition = [...robotPositionInit];
+        worldScale = worldScaleInit;
+        // Reset all UI elements to initial state
+        worldSlider.value = worldScaleInit * 10;
+        worldTextbox.value = worldScaleInit * 10;
+        gripperSlider.value = gripperRotationInit + 20;
+        gripperTextbox.value = gripperRotationInit + 20;
+        armRadio[0].checked = true;
+        render();
+    });
+
     // Keydown event listener for arm control
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.code === 'Digit1') index = 0;
         else if (event.code === 'Digit2') index = 1;
         else if (event.code === 'Digit3') index = 2;
@@ -66,12 +84,12 @@ function getUIElement() {
             gripperTextbox.dispatchEvent(new Event('input'));
         }
 
-        if ( index === 0 || index === 1 || index === 2 || index === 3 ){
+        if (index === 0 || index === 1 || index === 2 || index === 3) {
             armRadio[index].checked = true;
             armRadio[index].dispatchEvent(new Event('change'));
         }
 
-        if ( index === 0 ){
+        if (index === 0) {
             if (event.code === 'KeyX') indexP = 0;
             else if (event.code === 'KeyY') indexP = 1;
             else if (event.code === 'KeyZ') indexP = 2;
@@ -84,7 +102,7 @@ function getUIElement() {
                 positionTextbox.dispatchEvent(new Event('input'));
             }
 
-            if ( indexP === 0 || indexP === 1 || indexP === 2 ){
+            if (indexP === 0 || indexP === 1 || indexP === 2) {
                 positionRadio[indexP].checked = true;
                 positionRadio[indexP].dispatchEvent(new Event('change'));
             }
@@ -95,20 +113,20 @@ function getUIElement() {
     // Event listener for world Scale
     worldSlider.addEventListener('input', function () {
         worldTextbox.value = parseFloat(worldSlider.value);
-        worldScale = parseFloat(worldSlider.value)/10;
+        worldScale = parseFloat(worldSlider.value) / 10;
         render();
     })
 
     worldTextbox.addEventListener('input', function () {
         worldSlider.value = parseFloat(worldTextbox.value);
-        worldScale = parseFloat(worldSlider.value)/10;
+        worldScale = parseFloat(worldSlider.value) / 10;
         render();
     })
 
     // Event listener for gripper
     gripperSlider.addEventListener('input', function () {
         gripperTextbox.value = parseFloat(gripperSlider.value);
-        gripperRotation = parseFloat(gripperSlider.value)-20;
+        gripperRotation = parseFloat(gripperSlider.value) - 20;
         render();
     })
 
@@ -116,7 +134,7 @@ function getUIElement() {
         if (gripperTextbox.value >= 55) gripperTextbox.value = 55;
         else if (gripperTextbox.value <= 0) gripperTextbox.value = 0;
         gripperSlider.value = parseFloat(gripperTextbox.value);
-        gripperRotation = parseFloat(gripperTextbox.value)-20;
+        gripperRotation = parseFloat(gripperTextbox.value) - 20;
         render();
     })
 
@@ -165,7 +183,7 @@ function getUIElement() {
         if (jointTextbox.value >= 180) jointTextbox.value = -180 + (jointTextbox.value % 180);
         else if (jointTextbox.value <= -180) jointTextbox.value = 180 - (jointTextbox.value % 180);
         jointSlider.value = parseFloat(jointTextbox.value);
-        if (armRadio[0].checked)  baseRotation = parseFloat(jointTextbox.value);
+        if (armRadio[0].checked) baseRotation = parseFloat(jointTextbox.value);
         else if (armRadio[1].checked) lowerArmRotation[1] = parseFloat(jointTextbox.value);
         else if (armRadio[2].checked) middleArmRotation[1] = parseFloat(jointTextbox.value);
         else if (armRadio[3].checked) upperArmRotation[1] = parseFloat(jointTextbox.value);
@@ -192,9 +210,9 @@ function getUIElement() {
     })
 
     // Event listener for robot position radio
-    for (let i = 0; i < positionRadio.length; i++){
+    for (let i = 0; i < positionRadio.length; i++) {
         positionRadio[i].addEventListener('change', function () {
-            if (positionRadio[i].checked){
+            if (positionRadio[i].checked) {
                 positionSlider.value = robotPosition[i];
                 positionTextbox.value = robotPosition[i];
             }
@@ -202,19 +220,19 @@ function getUIElement() {
     }
 
     // Event listener for robot position slider and textbox
-    positionSlider.addEventListener('input', function() {
+    positionSlider.addEventListener('input', function () {
         positionTextbox.value = parseFloat(positionSlider.value);
-        for (let i = 0; i < positionRadio.length; i++){
+        for (let i = 0; i < positionRadio.length; i++) {
             if (positionRadio[i].checked) robotPosition[i] = parseFloat(positionSlider.value);
         }
         render();
     })
 
     positionTextbox.addEventListener('input', function () {
-        if (positionTextbox.value >= 50 ) positionTextbox.value = 50;
-        else if(positionTextbox.value <=-50) positionTextbox.value = -50;
+        if (positionTextbox.value >= 50) positionTextbox.value = 50;
+        else if (positionTextbox.value <= -50) positionTextbox.value = -50;
         positionSlider.value = parseFloat(positionTextbox.value);
-        for (let i = 0; i < positionRadio.length; i++){
+        for (let i = 0; i < positionRadio.length; i++) {
             if (positionRadio[i].checked) robotPosition[i] = parseFloat(positionTextbox.value);
         }
         render();

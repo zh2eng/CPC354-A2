@@ -138,10 +138,19 @@ setupRobotArm = function () {
 }
 
 setUpCube = function () {
-    modelViewMatrix = mat4();
-    modelViewMatrix = mult(modelViewMatrix, translate(7, -5, -30));
-    modelViewMatrix = mult(modelViewMatrix, rotateX(15));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(10));
-    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
+    // should be do animation and cube gripped, cube gripping to be added later
+    if(doAnimation){
+        // translate the cube to be in front of the gripper
+        // translation of 2 units in the direction of upperArmRotation[1]
+        gripperObjMatrix = mult(gripperObjMatrix, translate(0, 0, 2));
+        gripperObjMatrix = mult(gripperObjMatrix, rotateY(upperArmRotation[1]));
+        modelViewMatrix = gripperObjMatrix;
+    } else{
+        modelViewMatrix = mat4();
+        modelViewMatrix = mult(modelViewMatrix, translate(cubePosition[0], cubePosition[1], cubePosition[2]));
+        modelViewMatrix = mult(modelViewMatrix, rotateX(15));
+        modelViewMatrix = mult(modelViewMatrix, rotateY(10));
+        modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
+    }
     drawCube();
 }

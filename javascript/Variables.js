@@ -44,17 +44,29 @@ const armTranslate = vec3(0, 0.0025, 0)
 const jointTranslate = vec3(0, 23.3, 0)
 
 // Variables for arm and joint rotation
-var baseRotation = 0;
-var lowerArmRotation = [-20, 20]; // [arm angle, joint angle]
-var middleArmRotation = [-30, -50]; // [arm angle, joint angle]
-var upperArmRotation = [-60, -10]; // [arm angle, joint angle]
-var gripperRotation = 5; // gripper angle
+// Default values
+const baseRotationInit = 0;
+const lowerArmRotationInit = [-20, 20];
+const middleArmRotationInit = [-30, -50];
+const upperArmRotationInit = [-60, -10];
+const gripperRotationInit = 5;
+var baseRotation = baseRotationInit;
+var lowerArmRotation = [...lowerArmRotationInit]; // [arm angle, joint angle]
+var middleArmRotation = [...middleArmRotationInit]; // [arm angle, joint angle]
+var upperArmRotation = [...upperArmRotationInit]; // [arm angle, joint angle]
+var gripperRotation = gripperRotationInit; // gripper angle
+// Special model view matrices for gripper and object held by gripper
+var gripperObjMatrix = mat4(); // model view matrix of object gripped by gripper
 
-// Variable for position of robot arm
-var robotPosition = [0, -8, -50];
+// Variable for position of robot arm and cube
+const robotPositionInit = [0, -8, -50];
+var robotPosition = [...robotPositionInit];
+const cubePositionInit = [7, -5, -50];
+var cubePosition = [...cubePositionInit];
 
 // Slider and textbox for world scale
-var worldScale = 0.25;
+const worldScaleInit = 0.25;
+var worldScale = worldScaleInit;
 var worldSlider, worldTextbox;
 
 // Slider and textbox for robot arm
