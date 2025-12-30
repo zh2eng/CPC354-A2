@@ -66,23 +66,20 @@ function render() {
         doAnimation = false;
         cancelAnimationFrame(animFrame);
     }
-    // Clear the color buffer and the depth buffer before rendering a new frame
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Pass a perspective projection matrix to the shader
     projectionMatrix = perspective(45, canvas.width / canvas.height, 0.1, 100);
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
-    setupRobotArm();
-    modelViewMatrix = mat4();
-    modelViewMatrix = mult(modelViewMatrix, translate(7, -5, -30));
-    modelViewMatrix = mult(modelViewMatrix, rotateX(15));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(10));
-    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
-    drawCube();
+    animUpdate();
+}
 
-    //Only request new frame if animation is running
-    if (doAnimation) requestAnimationFrame(render);
+animUpdate = function () {
+    // Clear the color buffer and the depth buffer before rendering a new frame
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    setupRobotArm();
+    setUpCube();
+    if(doAnimation) animFrame = requestAnimationFrame(animUpdate);
 }
 
 setupRobotArm = function () {
@@ -127,15 +124,24 @@ setupRobotArm = function () {
 
     // === LEFT GRIPPER ===
     modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
-    modelViewMatrix = mult(modelViewMatrix, scalem(-1,-1,-1));
+    modelViewMatrix = mult(modelViewMatrix, scalem(-1, -1, -1));
     modelViewMatrix = mult(modelViewMatrix, rotateZ(gripperRotation));
     drawGripper();
 
     // === RIGHT GRIPPER ===
     modelViewMatrix = mult(modelViewMatrix, scalem(-1, 1, 1));
     // 2 times left gripper to balance the gripper purpose
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(gripperRotation*2));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(gripperRotation * 2));
     drawGripper();
 
     popMatrix();
+}
+
+setUpCube = function () {
+    modelViewMatrix = mat4();
+    modelViewMatrix = mult(modelViewMatrix, translate(7, -5, -30));
+    modelViewMatrix = mult(modelViewMatrix, rotateX(15));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(10));
+    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
+    drawCube();
 }

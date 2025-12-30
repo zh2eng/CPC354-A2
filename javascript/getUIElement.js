@@ -25,7 +25,7 @@ function getUIElement() {
     // Event listener for the toggle button
     toggleButton.addEventListener('click', function () {
         if(!doAnimation){
-            toggleButton.innerHTML = '<span>&#9724;</span> Start';
+            toggleButton.innerHTML = '<span>&#9724;</span> Stop';
             toggleButton.className = 'base-btn stop-btn';
         }
         else{
