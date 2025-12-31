@@ -41,14 +41,14 @@ var newColors = [
 
 // Constant for initial translation values
 const armTranslate = vec3(0, 0.0025, 0)
-const jointTranslate = vec3(0, 23.3, 0)
+const jointTranslate = vec3(0, 33.3, 0)
 
 // Variables for arm and joint rotation
 // Default values
 const baseRotationInit = 0;
-const lowerArmRotationInit = [-20, 20];
-const middleArmRotationInit = [-30, -50];
-const upperArmRotationInit = [-60, -10];
+const lowerArmRotationInit = [0, 0];
+const middleArmRotationInit = [0, 0];
+const upperArmRotationInit = [0, 0];
 const gripperRotationInit = 5;
 var baseRotation = baseRotationInit;
 var lowerArmRotation = [...lowerArmRotationInit]; // [arm angle, joint angle]
@@ -61,7 +61,7 @@ var gripperObjMatrix = mat4(); // model view matrix of object gripped by gripper
 // Variable for position of robot arm and cube
 const robotPositionInit = [0, -8, -50];
 var robotPosition = [...robotPositionInit];
-const cubePositionInit = [7, -5, -50];
+const cubePositionInit = [14, -8, -50];
 var cubePosition = [...cubePositionInit];
 
 // Slider and textbox for world scale

@@ -35,12 +35,12 @@ for (let i = 0; i <= jointSegments; i++) {
 
 
 radius = 3.0;
-arm.push(vec4(0, 20, 0, 1))
+arm.push(vec4(0, 30, 0, 1))
 for(let i = 0; i <= armSegments; i++){
     let angle = (i * 2 * Math.PI) / armSegments;  
     let x = radius * Math.cos(angle);
     let z = radius * Math.sin(angle);
-    arm.push(vec4(x, 20, z, 1)); 
+    arm.push(vec4(x, 30, z, 1)); 
 }
 
 arm.push(vec4(0, 2.5, 0, 1))

@@ -42,12 +42,12 @@ for (let i = 0; i <= baseSegments; i++) {
     base.push(vec4(x, -3.0, z, 1)); 
 }
 
-base.push(vec4(0, -3.3, 0, 1))
+base.push(vec4(0, -4, 0, 1))
 for (let i = 0; i <= baseSegments; i++) {
     let angle = (i * 2 * Math.PI) / baseSegments;  
     let x = radius * Math.cos(angle);
     let z = radius * Math.sin(angle);
-    base.push(vec4(x, -3.3, z, 1)); 
+    base.push(vec4(x, -4, z, 1)); 
 }
 
 for (let i = 0; i < hook.length; i++){

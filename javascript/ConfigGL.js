@@ -148,8 +148,8 @@ setUpCube = function () {
     } else{
         modelViewMatrix = mat4();
         modelViewMatrix = mult(modelViewMatrix, translate(cubePosition[0], cubePosition[1], cubePosition[2]));
-        modelViewMatrix = mult(modelViewMatrix, rotateX(15));
-        modelViewMatrix = mult(modelViewMatrix, rotateY(10));
+        modelViewMatrix = mult(modelViewMatrix, rotateX(0));
+        modelViewMatrix = mult(modelViewMatrix, rotateY(0));
         modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
     }
     drawCube();
