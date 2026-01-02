@@ -22,9 +22,10 @@ function getUIElement() {
     positionSlider = document.getElementById('positionSlider');
     positionTextbox = document.getElementById('positionTextbox');
 
-    // Event listener for the toggle button
+    // Event listener for the start/stop button
     toggleButton.addEventListener('click', function () {
-        if (!doAnimation) {
+        doAnimation = !doAnimation;
+        if (doAnimation) {
             toggleButton.innerHTML = '<span>&#9724;</span> Stop';
             toggleButton.className = 'base-btn stop-btn';
         }
@@ -32,11 +33,16 @@ function getUIElement() {
             toggleButton.innerHTML = '<span>&#9654;</span> Start';
             toggleButton.className = 'base-btn start-btn';
         }
-        doAnimation = !doAnimation
+        render();
     });
 
     resetButton.addEventListener('click', function () {
         // Reset all variables to initial state
+        isGripping = false;
+        doAnimation = false;
+        animSeq = 0;
+        toggleButton.innerHTML = '<span>&#9654;</span> Start';
+        toggleButton.className = 'base-btn start-btn';
         baseRotation = baseRotationInit;
         lowerArmRotation = [...lowerArmRotationInit];
         middleArmRotation = [...middleArmRotationInit];
@@ -50,6 +56,10 @@ function getUIElement() {
         gripperSlider.value = gripperRotationInit + 20;
         gripperTextbox.value = gripperRotationInit + 20;
         armRadio[0].checked = true;
+        robotPosition = [...robotPositionInit];
+        cubePosition = [...cubePositionInit];
+        positionRadio[0].checked = true;
+        positionSlider.value = robotPosition[0];
         render();
     });
 

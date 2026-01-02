@@ -51,7 +51,3 @@ function pushMatrix() {
 function popMatrix() {
     modelViewMatrix = stack.pop();
 }
-
-function isInContact(objMatrix1, objMatrx2){
-    
-}

@@ -20,6 +20,10 @@ var position = [], theta = [], scaleNum = []
 
 // 6. Animation state control
 var doAnimation = false; // flag to indicate if animation is running
+var isGripping = false; // flag to indicate if gripper is gripping the cube
+var animSeq = 0; // variable to track the current animation sequence
+var speed = 1; // speed of animation
+var animFrame; // variable to store the animation frame ID
 
 // Variables for the robot arms
 var points = [], colors = [];
@@ -43,20 +47,36 @@ var newColors = [
 const armTranslate = vec3(0, 0.0025, 0)
 const jointTranslate = vec3(0, 33.3, 0)
 
+// Reference variables for arm length and cube length
+const armLength = 27.5; // From: arm.js, 30-2.5=27.5
+const cubeLength = 10.0; // From: cube.js, length=5.0
+const jointLength = 6.5; // From: Zhi Heng
+
 // Variables for arm and joint rotation
 // Default values
 const baseRotationInit = 0;
 const lowerArmRotationInit = [0, 0];
 const middleArmRotationInit = [0, 0];
 const upperArmRotationInit = [0, 0];
-const gripperRotationInit = 5;
+const gripperRotationInit = 35;
 var baseRotation = baseRotationInit;
 var lowerArmRotation = [...lowerArmRotationInit]; // [arm angle, joint angle]
 var middleArmRotation = [...middleArmRotationInit]; // [arm angle, joint angle]
 var upperArmRotation = [...upperArmRotationInit]; // [arm angle, joint angle]
 var gripperRotation = gripperRotationInit; // gripper angle
-// Special model view matrices for gripper and object held by gripper
-var gripperObjMatrix = mat4(); // model view matrix of object gripped by gripper
+
+// Variables for ideal robot arm orientation for pickup and dropoff
+const lowerJoint = -25;
+const middleJoint = -48;
+const upperJoint = -93;
+const gripperPosition = 3;
+
+// Variables for selected paths
+// Note: lift angles are relative to ideal angles
+// Applies in both display and calculations
+var liftAngleLower = 30;
+var liftAngleMiddle = 30;
+var liftAngleUpper = 30;
 
 // Variable for position of robot arm and cube
 const robotPositionInit = [0, -8, -50];

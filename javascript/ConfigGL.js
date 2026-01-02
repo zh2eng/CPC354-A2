@@ -61,13 +61,8 @@ function configWebGL() {
 
 // Render the graphics for viewing
 function render() {
-    // Cancel any previously requested animation frame
-    if (doAnimation) {
-        doAnimation = false;
-        cancelAnimationFrame(animFrame);
-    }
-
     // Pass a perspective projection matrix to the shader
+    // projectionMatrix = orthogonal(-10, 10, -12, 12, 0.1, 100);
     projectionMatrix = perspective(45, canvas.width / canvas.height, 0.1, 100);
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
@@ -77,19 +72,32 @@ function render() {
 animUpdate = function () {
     // Clear the color buffer and the depth buffer before rendering a new frame
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    setupRobotArm();
-    setUpCube();
-    if(doAnimation) animFrame = requestAnimationFrame(animUpdate);
-}
 
-setupRobotArm = function () {
     // Create the model view matrix
     modelViewMatrix = mat4();
     modelViewMatrix = mult(modelViewMatrix, translate(robotPosition[0], robotPosition[1], robotPosition[2]));
     modelViewMatrix = mult(modelViewMatrix, rotateY(baseRotation));
     modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
 
+    if(doAnimation){
+        animate();
+    }
+
+    // Start of Hierarchical Model
     pushMatrix();
+    setupRobotArm();
+    if (isGripping) {
+        // Include cube setup within the robot arm matrix stack
+        setUpCube();
+        popMatrix();
+    } else {
+        popMatrix();
+        setUpCube();
+    }
+    if (doAnimation) animFrame = requestAnimationFrame(animUpdate);
+}
+
+setupRobotArm = function () {
     drawJoint();
 
     // === LOWER ARM ===
@@ -133,19 +141,17 @@ setupRobotArm = function () {
     // 2 times left gripper to balance the gripper purpose
     modelViewMatrix = mult(modelViewMatrix, rotateZ(gripperRotation * 2));
     drawGripper();
-
-    popMatrix();
 }
 
 setUpCube = function () {
     // should be do animation and cube gripped, cube gripping to be added later
-    if(doAnimation){
+    if(isGripping){
         // translate the cube to be in front of the gripper
         // translation of 2 units in the direction of upperArmRotation[1]
-        gripperObjMatrix = mult(gripperObjMatrix, translate(0, 0, 2));
-        gripperObjMatrix = mult(gripperObjMatrix, rotateY(upperArmRotation[1]));
-        modelViewMatrix = gripperObjMatrix;
+        modelViewMatrix = mult(modelViewMatrix, translate(0, -8, 0));
+        modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation[1]));
     } else{
+        // Use cubePosition and default orientation when not gripping
         modelViewMatrix = mat4();
         modelViewMatrix = mult(modelViewMatrix, translate(cubePosition[0], cubePosition[1], cubePosition[2]));
         modelViewMatrix = mult(modelViewMatrix, rotateX(0));
