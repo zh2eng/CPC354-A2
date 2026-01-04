@@ -16,6 +16,7 @@ function getUIElement() {
     jointSlider = document.getElementById('jointSlider');
     jointTextbox = document.getElementById('jointTextbox');
     armLabel = document.getElementById('armLabel');
+    jointLabel = document.getElementById('jointLabel');
     armSlider = document.getElementById('armSlider');
     armTextbox = document.getElementById('armTextbox');
     liftAngleSettings = document.getElementById('liftAngleSettings');
@@ -28,9 +29,9 @@ function getUIElement() {
             toggleButton.className = 'base-btn stop-btn';
             menus.style.display = 'none';
             baseRotationStart = baseRotation;
-            lowerArmRotationStart = [...lowerArmRotation];
-            middleArmRotationStart = [...middleArmRotation];
-            upperArmRotationStart = [...upperArmRotation];
+            lowerArmRotationStart = lowerArmRotation;
+            middleArmRotationStart = middleArmRotation;
+            upperArmRotationStart = upperArmRotation;
             gripperRotationStart = gripperRotation;
             render();
         }
@@ -50,9 +51,9 @@ function getUIElement() {
         toggleButton.innerHTML = '<span>&#9654;</span> Start';
         toggleButton.className = 'base-btn start-btn';
         baseRotation = baseRotationDefault;
-        lowerArmRotation = [...lowerArmRotationDefault];
-        middleArmRotation = [...middleArmRotationDefault];
-        upperArmRotation = [...upperArmRotationDefault];
+        lowerArmRotation = lowerArmRotationDefault;
+        middleArmRotation = middleArmRotationDefault;
+        upperArmRotation = upperArmRotationDefault;
         gripperRotation = gripperRotationDefault;
         speed = initialSpeed;
         worldScale = worldScaleInit;
@@ -123,28 +124,23 @@ function getUIElement() {
     for (let i = 0; i < armRadio.length; i++) {
         armRadio[i].addEventListener('change', function () {
             armLabel.style.display = i === 0 ? 'none' : 'block';
+            jointLabel.style.display = i === 0 ? 'block' : 'none';
 
             if (armRadio[0].checked) {
                 jointSlider.value = baseRotation;
                 jointTextbox.value = baseRotation;
             }
             else if (armRadio[1].checked) {
-                armSlider.value = lowerArmRotation[0];
-                armTextbox.value = lowerArmRotation[0];
-                jointSlider.value = lowerArmRotation[1];
-                jointTextbox.value = lowerArmRotation[1];
+                armSlider.value = lowerArmRotation;
+                armTextbox.value = lowerArmRotation;
             }
             else if (armRadio[2].checked) {
-                armSlider.value = middleArmRotation[0];
-                armTextbox.value = middleArmRotation[0];
-                jointSlider.value = middleArmRotation[1];
-                jointTextbox.value = middleArmRotation[1];
+                armSlider.value = middleArmRotation;
+                armTextbox.value = middleArmRotation;
             }
             else if (armRadio[3].checked) {
-                armSlider.value = upperArmRotation[0];
-                armTextbox.value = upperArmRotation[0];
-                jointSlider.value = upperArmRotation[1];
-                jointTextbox.value = upperArmRotation[1];
+                armSlider.value = upperArmRotation;
+                armTextbox.value = upperArmRotation;
             }
         });
     }
@@ -153,9 +149,6 @@ function getUIElement() {
     jointSlider.addEventListener('input', function () {
         jointTextbox.value = parseFloat(jointSlider.value);
         if (armRadio[0].checked) baseRotation = parseFloat(jointSlider.value);
-        else if (armRadio[1].checked) lowerArmRotation[1] = parseFloat(jointSlider.value);
-        else if (armRadio[2].checked) middleArmRotation[1] = parseFloat(jointSlider.value);
-        else if (armRadio[3].checked) upperArmRotation[1] = parseFloat(jointSlider.value);
         render()
     })
 
@@ -164,18 +157,15 @@ function getUIElement() {
         else if (jointTextbox.value <= -180) jointTextbox.value = 180 - (jointTextbox.value % 180);
         jointSlider.value = parseFloat(jointTextbox.value);
         if (armRadio[0].checked) baseRotation = parseFloat(jointTextbox.value);
-        else if (armRadio[1].checked) lowerArmRotation[1] = parseFloat(jointTextbox.value);
-        else if (armRadio[2].checked) middleArmRotation[1] = parseFloat(jointTextbox.value);
-        else if (armRadio[3].checked) upperArmRotation[1] = parseFloat(jointTextbox.value);
         render()
     });
 
     // Event listener for the arm slider and text box
     armSlider.addEventListener('input', function () {
         armTextbox.value = parseFloat(armSlider.value);
-        if (armRadio[1].checked) lowerArmRotation[0] = parseFloat(armSlider.value);
-        else if (armRadio[2].checked) middleArmRotation[0] = parseFloat(armSlider.value);
-        else if (armRadio[3].checked) upperArmRotation[0] = parseFloat(armSlider.value);
+        if (armRadio[1].checked) lowerArmRotation = parseFloat(armSlider.value);
+        else if (armRadio[2].checked) middleArmRotation = parseFloat(armSlider.value);
+        else if (armRadio[3].checked) upperArmRotation = parseFloat(armSlider.value);
         render()
     })
 
@@ -183,9 +173,9 @@ function getUIElement() {
         if (armTextbox.value >= 110) armTextbox.value = 110;
         else if (armTextbox.value <= -110) armTextbox.value = -110;
         armSlider.value = parseFloat(armTextbox.value);
-        if (armRadio[1].checked) lowerArmRotation[0] = parseFloat(armTextbox.value);
-        else if (armRadio[2].checked) middleArmRotation[0] = parseFloat(armTextbox.value);
-        else if (armRadio[3].checked) upperArmRotation[0] = parseFloat(armTextbox.value);
+        if (armRadio[1].checked) lowerArmRotation = parseFloat(armTextbox.value);
+        else if (armRadio[2].checked) middleArmRotation = parseFloat(armTextbox.value);
+        else if (armRadio[3].checked) upperArmRotation = parseFloat(armTextbox.value);
         render()
     })
 
@@ -221,49 +211,55 @@ function getUIElement() {
                 // move lower arm left
                 armRadio[1].checked = true;
                 armLabel.style.display = 'block';
-                lowerArmRotation[0] -= 1;
-                armSlider.value = lowerArmRotation[0];
-                armTextbox.value = lowerArmRotation[0];
+                jointLabel.style.display = 'none';
+                lowerArmRotation -= 1;
+                armSlider.value = lowerArmRotation;
+                armTextbox.value = lowerArmRotation;
                 break;
             case 's':
                 // move lower arm right
                 armRadio[1].checked = true;
-                lowerArmRotation[0] += 1;
+                lowerArmRotation += 1;
                 armLabel.style.display = 'block';
-                armSlider.value = lowerArmRotation[0];
-                armTextbox.value = lowerArmRotation[0];
+                jointLabel.style.display = 'none';
+                armSlider.value = lowerArmRotation;
+                armTextbox.value = lowerArmRotation;
                 break;
             case 'd':
                 // move middle arm left
                 armRadio[2].checked = true;
                 armLabel.style.display = 'block';
-                middleArmRotation[0] -= 1;
-                armSlider.value = middleArmRotation[0];
-                armTextbox.value = middleArmRotation[0];
+                jointLabel.style.display = 'none';
+                middleArmRotation -= 1;
+                armSlider.value = middleArmRotation;
+                armTextbox.value = middleArmRotation;
                 break;
             case 'f':
                 // move middle arm right
                 armRadio[2].checked = true;
                 armLabel.style.display = 'block';
-                middleArmRotation[0] += 1;
-                armSlider.value = middleArmRotation[0];
-                armTextbox.value = middleArmRotation[0];
+                jointLabel.style.display = 'none';
+                middleArmRotation += 1;
+                armSlider.value = middleArmRotation;
+                armTextbox.value = middleArmRotation;
                 break;
             case 'q':
                 // move upper arm left
                 armRadio[3].checked = true;
                 armLabel.style.display = 'block';
-                upperArmRotation[0] -= 1;
-                armSlider.value = upperArmRotation[0];
-                armTextbox.value = upperArmRotation[0];
+                jointLabel.style.display = 'none';
+                upperArmRotation -= 1;
+                armSlider.value = upperArmRotation;
+                armTextbox.value = upperArmRotation;
                 break;
             case 'w':
                 // move upper arm right
                 armRadio[3].checked = true;
                 armLabel.style.display = 'block';
-                upperArmRotation[0] += 1;
-                armSlider.value = upperArmRotation[0];
-                armTextbox.value = upperArmRotation[0];
+                jointLabel.style.display = 'none';
+                upperArmRotation += 1;
+                armSlider.value = upperArmRotation;
+                armTextbox.value = upperArmRotation;
                 break;
             }
         render();

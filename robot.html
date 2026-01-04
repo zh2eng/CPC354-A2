@@ -113,16 +113,18 @@
                         <label for="upperArm" class="instruction">Upper Arm</label>
                     </div>
                 </div><br>
-                <label for="jointRotation" class="instruction">Joint</label>
-                <div class="class-range">
-                    <input
-                        type="range" id="jointSlider" class="range-input"
-                        min="-180" max="180" value="0.0" step="1.0" title="Adjust the joint angle"
-                    />
-                    <input
-                        type="number" id="jointTextbox" class="text-input"
-                        min="-180" max="180" value="0.0" step="1.0" title="Adjust the joint angle"
-                    />
+                <div id="jointLabel"> 
+                    <label for="jointRotation" class="instruction">Joint</label>
+                    <div class="class-range">
+                        <input
+                            type="range" id="jointSlider" class="range-input"
+                            min="-180" max="180" value="0.0" step="1.0" title="Adjust the joint angle"
+                        />
+                        <input
+                            type="number" id="jointTextbox" class="text-input"
+                            min="-180" max="180" value="0.0" step="1.0" title="Adjust the joint angle"
+                        />
+                    </div>
                 </div>
                 <div id="armLabel" style="display: none;"> 
                     <label for="armRotation" class="instruction">Arm</label>

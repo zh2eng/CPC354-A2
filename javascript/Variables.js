@@ -56,9 +56,9 @@ const jointLength = 6.5; // From: Zhi Heng
 // Variables for arm and joint rotation
 // Default values
 const baseRotationDefault = 0;
-const lowerArmRotationDefault = [0, 0];
-const middleArmRotationDefault = [0, 0];
-const upperArmRotationDefault = [0, 0];
+const lowerArmRotationDefault = 0;
+const middleArmRotationDefault = 0;
+const upperArmRotationDefault = 0;
 const gripperRotationDefault = 35;
 // initial rotation angles
 var baseRotationStart;
@@ -69,9 +69,9 @@ var gripperRotationStart;
 // rotation angles at time of animation
 var baseRotation = baseRotationDefault;
 // [arm angle, joint angle]
-var lowerArmRotation = [...lowerArmRotationDefault]; 
-var middleArmRotation = [...middleArmRotationDefault];
-var upperArmRotation = [...upperArmRotationDefault];
+var lowerArmRotation = lowerArmRotationDefault; 
+var middleArmRotation = middleArmRotationDefault;
+var upperArmRotation = upperArmRotationDefault;
 var gripperRotation = gripperRotationDefault; // gripper angle
 
 // Variables for ideal robot arm orientation for pickup and dropoff

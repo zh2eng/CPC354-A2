@@ -102,32 +102,29 @@ setupRobotArm = function () {
 
     // === LOWER ARM ===
     modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(lowerArmRotation[0]));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(lowerArmRotation));
     drawArm();
 
     // === LOWER ARM JOINT ===
     modelViewMatrix = mult(modelViewMatrix, translate(jointTranslate));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(lowerArmRotation[1]));
     drawJoint();
 
     // === MIDDLE ARM ===
     modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(middleArmRotation[0]));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(middleArmRotation));
     drawArm();
 
     // === MIDDLE ARM JOINT ===
     modelViewMatrix = mult(modelViewMatrix, translate(jointTranslate));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(middleArmRotation[1]));
     drawJoint();
 
     // === UPPER ARM ===
     modelViewMatrix = mult(modelViewMatrix, translate(armTranslate));
-    modelViewMatrix = mult(modelViewMatrix, rotateZ(upperArmRotation[0]));
+    modelViewMatrix = mult(modelViewMatrix, rotateZ(upperArmRotation));
     drawArm();
 
     // === UPPER ARM JOINT ===
     modelViewMatrix = mult(modelViewMatrix, translate(jointTranslate));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation[1]));
     drawJoint();
 
     // === LEFT GRIPPER ===
@@ -149,7 +146,7 @@ setUpCube = function () {
         // translate the cube to be in front of the gripper
         // translation of 2 units in the direction of upperArmRotation[1]
         modelViewMatrix = mult(modelViewMatrix, translate(0, -8, 0));
-        modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation[1]));
+        modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation));
     } else{
         // Use cubePosition and default orientation when not gripping
         modelViewMatrix = mat4();
