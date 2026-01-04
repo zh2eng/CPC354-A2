@@ -57,7 +57,7 @@
     <body>
         <div class="left-side">
             <h1>CPC354 - Robot Arm</h1>
-            <div class="menus">
+            <div class="menus" id="menus">
                 <label class="menus-label">World Scale</label><br>
                 <div class="class-range">
                     <input
@@ -82,6 +82,17 @@
                     />
                 </div>
 
+                <label class="menus-label">Speed</label>
+                <div class="class-range">
+                    <input
+                        type="range" id="speedSlider" class="range-input"
+                        min="0.2" max="2" value="1" step="0.1" title="Adjust the animation speed"
+                    />
+                    <input
+                        type="number" id="speedTextbox" class="text-input"
+                        min="0.2" max="2" value="1" step="0.1" title="Adjust the animation speed"
+                    />
+                </div>
 
                 <label class="menus-label">Robot oreintation</label><br>
                 <div class="radio-labels-row">
@@ -126,31 +137,42 @@
                         />
                     </div>
                 </div>
-                <div id="positionLabel">
-                    <label for="position" class="instruction">Position</label>
-                    <div class="position-labels-row">
+                <div id="liftAngleSettings">
+                    <label for="liftAngle" class="menus-label">Lift Angle Settings</label>
+                    <div>
+                        <label for="liftAngleLowerArm" class="instruction block">Lift angles of lower arm</label>
                         <div>
-                            <input type="radio" id="xPosition" name="robotPosition" title="Select the X position" checked/>
-                            <label for="coordinateX" class="instruction">X</label>
+                            <input
+                                type="range" id="liftAngleLowerArmSlider" class="range-input"
+                                min="0" max="90" value="30" step="1" title="Lift angles of lower arm"
+                            >
+                            <input 
+                                type="text" id="liftAngleLowerArmTextbox" class="text-input"
+                                min="0" max="90" value="30" step="1" title="Lift angles of lower arm"
+                            >
                         </div>
+                        <label for="liftAngleMiddleArm" class="instruction block">Lift angles of middle arm</label>
                         <div>
-                            <input type="radio" id="yPosition" name="robotPosition" title="Select the Y position"/>
-                            <label for="coordinateY" class="instruction">Y</label>
+                            <input
+                                type="range" id="liftAngleMiddleArmSlider" class="range-input"
+                                min="0" max="90" value="30" step="1" title="Lift angles of middle arm"
+                            >
+                            <input 
+                                type="text" id="liftAngleMiddleArmTextbox" class="text-input"
+                                min="0" max="90" value="30" step="1" title="Lift angles of middle arm"
+                            >
                         </div>
+                        <label for="liftAngleUpperArm" class="instruction block">Lift angles of upper arm</label>
                         <div>
-                            <input type="radio" id="zPosition" name="robotPosition" title="Select the Z position"/>
-                            <label for="coordinateZ" class="instruction">Z</label>
+                            <input
+                                type="range" id="liftAngleUpperArmSlider" class="range-input"
+                                min="0" max="90" value="30" step="1" title="Lift angles of upper arm"
+                            >
+                            <input 
+                                type="text" id="liftAngleUpperArmTextbox" class="text-input"
+                                min="0" max="90" value="30" step="1" title="Lift angles of upper arm"
+                            >
                         </div>
-                    </div>
-                    <div class="class-range">
-                        <input
-                            type="range" id="positionSlider" class="range-input"
-                            min="-50" max="50" value="0.0" step="0.01" title="Adjust the robot position"
-                        />
-                        <input
-                            type="number" id="positionTextbox" class="text-input"
-                            min="-50" max="50" value="0.0" step="0.01" title="Adjust the robot position"
-                        />
                     </div>
                 </div>
             </div>

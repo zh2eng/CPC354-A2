@@ -1,12 +1,15 @@
 // Retrieve all elements from HTML and store in the corresponding variables
 function getUIElement() {
     canvas = document.getElementById("gl-canvas");
+    menus = document.getElementById("menus");
     toggleButton = document.getElementById('toggleButton');
     resetButton = document.getElementById('reset');
     worldSlider = document.getElementById('worldSlider');
     worldTextbox = document.getElementById('worldTextbox');
     gripperSlider = document.getElementById('gripperSlider');
     gripperTextbox = document.getElementById('gripperTextbox');
+    speedSlider = document.getElementById('speedSlider');
+    speedTextbox = document.getElementById('speedTextbox')
     for (let i = 0; i < 4; i++) {
         armRadio[i] = document.getElementById(armRadioLabels[i]);
     }
@@ -15,12 +18,7 @@ function getUIElement() {
     armLabel = document.getElementById('armLabel');
     armSlider = document.getElementById('armSlider');
     armTextbox = document.getElementById('armTextbox');
-    positionLabel = document.getElementById('positionLabel');
-    for (let i = 0; i < 3; i++) {
-        positionRadio[i] = document.getElementById(positionRadioLabels[i]);
-    }
-    positionSlider = document.getElementById('positionSlider');
-    positionTextbox = document.getElementById('positionTextbox');
+    liftAngleSettings = document.getElementById('liftAngleSettings');
 
     // Event listener for the start/stop button
     toggleButton.addEventListener('click', function () {
@@ -28,10 +26,18 @@ function getUIElement() {
         if (doAnimation) {
             toggleButton.innerHTML = '<span>&#9724;</span> Stop';
             toggleButton.className = 'base-btn stop-btn';
+            menus.style.display = 'none';
+            baseRotationStart = baseRotation;
+            lowerArmRotationStart = [...lowerArmRotation];
+            middleArmRotationStart = [...middleArmRotation];
+            upperArmRotationStart = [...upperArmRotation];
+            gripperRotationStart = gripperRotation;
+            render();
         }
         else {
             toggleButton.innerHTML = '<span>&#9654;</span> Start';
             toggleButton.className = 'base-btn start-btn';
+            menus.style.display = 'block';
         }
         render();
     });
@@ -43,82 +49,36 @@ function getUIElement() {
         animSeq = 0;
         toggleButton.innerHTML = '<span>&#9654;</span> Start';
         toggleButton.className = 'base-btn start-btn';
-        baseRotation = baseRotationInit;
-        lowerArmRotation = [...lowerArmRotationInit];
-        middleArmRotation = [...middleArmRotationInit];
-        upperArmRotation = [...upperArmRotationInit];
-        gripperRotation = gripperRotationInit;
-        robotPosition = [...robotPositionInit];
+        baseRotation = baseRotationDefault;
+        lowerArmRotation = [...lowerArmRotationDefault];
+        middleArmRotation = [...middleArmRotationDefault];
+        upperArmRotation = [...upperArmRotationDefault];
+        gripperRotation = gripperRotationDefault;
+        speed = initialSpeed;
         worldScale = worldScaleInit;
+        liftAngleLower = 30;
+        liftAngleMiddle = 30;
+        liftAngleUpper = 30;
+        
         // Reset all UI elements to initial state
         worldSlider.value = worldScaleInit * 10;
         worldTextbox.value = worldScaleInit * 10;
-        gripperSlider.value = gripperRotationInit + 20;
-        gripperTextbox.value = gripperRotationInit + 20;
+        gripperSlider.value = gripperRotationDefault + 20;
+        gripperTextbox.value = gripperRotationDefault + 20;
+        speedSlider.value = initialSpeed;
+        speedTextbox.value = initialSpeed;
         armRadio[0].checked = true;
-        robotPosition = [...robotPositionInit];
         cubePosition = [...cubePositionInit];
-        positionRadio[0].checked = true;
-        positionSlider.value = robotPosition[0];
+        liftAngleLowerArmTextbox.value = 30;
+        liftAngleLowerArmSlider.value = 30;
+        liftAngleMiddleArmTextbox.value = 30;
+        liftAngleMiddleArmSlider.value = 30;
+        liftAngleUpperArmTextbox.value = 30;
+        liftAngleUpperArmSlider.value = 30;
+        menus.style.display = 'block';
+
         render();
     });
-
-    // Keydown event listener for arm control
-    document.addEventListener('keydown', function (event) {
-        if (event.code === 'Digit1') index = 0;
-        else if (event.code === 'Digit2') index = 1;
-        else if (event.code === 'Digit3') index = 2;
-        else if (event.code === 'Digit4') index = 3;
-        else if (event.code === 'KeyW') {
-            armTextbox.value = parseFloat(armTextbox.value) - 1;
-            armTextbox.dispatchEvent(new Event('input'));
-        }
-        else if (event.code === 'KeyA') {
-            jointTextbox.value = parseFloat(jointTextbox.value) - 1;
-            jointTextbox.dispatchEvent(new Event('input'));
-        }
-        else if (event.code === 'KeyS') {
-            armTextbox.value = parseFloat(armTextbox.value) + 1;
-            armTextbox.dispatchEvent(new Event('input'));
-        }
-        else if (event.code === 'KeyD') {
-            jointTextbox.value = parseFloat(jointTextbox.value) + 1;
-            jointTextbox.dispatchEvent(new Event('input'));
-        }
-        else if (event.code === 'KeyG') {
-            gripperTextbox.value = parseFloat(gripperTextbox.value) + 1;
-            gripperTextbox.dispatchEvent(new Event('input'));
-        }
-        else if (event.code === 'KeyR') {
-            gripperTextbox.value = parseFloat(gripperTextbox.value) - 1;
-            gripperTextbox.dispatchEvent(new Event('input'));
-        }
-
-        if (index === 0 || index === 1 || index === 2 || index === 3) {
-            armRadio[index].checked = true;
-            armRadio[index].dispatchEvent(new Event('change'));
-        }
-
-        if (index === 0) {
-            if (event.code === 'KeyX') indexP = 0;
-            else if (event.code === 'KeyY') indexP = 1;
-            else if (event.code === 'KeyZ') indexP = 2;
-            else if (event.code === 'KeyW') {
-                positionTextbox.value = parseFloat(positionTextbox.value) + 1;
-                positionTextbox.dispatchEvent(new Event('input'));
-            }
-            else if (event.code === 'KeyS') {
-                positionTextbox.value = parseFloat(positionTextbox.value) - 1;
-                positionTextbox.dispatchEvent(new Event('input'));
-            }
-
-            if (indexP === 0 || indexP === 1 || indexP === 2) {
-                positionRadio[indexP].checked = true;
-                positionRadio[indexP].dispatchEvent(new Event('change'));
-            }
-        }
-
-    })
 
     // Event listener for world Scale
     worldSlider.addEventListener('input', function () {
@@ -148,11 +108,21 @@ function getUIElement() {
         render();
     })
 
+    // Event listener for speed
+    speedSlider.addEventListener('input', function () {
+        speedTextbox.value = parseFloat(speedSlider.value);
+        speed = parseFloat(speedSlider.value);
+    })
+
+    speedTextbox.addEventListener('input', function () {
+        speedSlider.value = parseFloat(speedTextbox.value);
+        speed = parseFloat(speedSlider.value);
+    })
+
     // Event listener for the arm radio buttons
     for (let i = 0; i < armRadio.length; i++) {
         armRadio[i].addEventListener('change', function () {
             armLabel.style.display = i === 0 ? 'none' : 'block';
-            positionLabel.style.display = i === 0 ? 'block' : 'none';
 
             if (armRadio[0].checked) {
                 jointSlider.value = baseRotation;
@@ -219,32 +189,83 @@ function getUIElement() {
         render()
     })
 
-    // Event listener for robot position radio
-    for (let i = 0; i < positionRadio.length; i++) {
-        positionRadio[i].addEventListener('change', function () {
-            if (positionRadio[i].checked) {
-                positionSlider.value = robotPosition[i];
-                positionTextbox.value = robotPosition[i];
+    // Event listener for lift angle settings
+    liftAngleSettings.addEventListener('change', (event) => {
+        const value = parseInt(event.target.value);
+        const id = event.target.id;
+        if (id === 'liftAngleLowerArmSlider') {
+            liftAngleLower = value;
+            liftAngleLowerArmTextbox.value = value;
+        } else if (id === 'liftAngleMiddleArmSlider') {
+            liftAngleMiddle = value;
+            liftAngleMiddleArmTextbox.value = value;
+        } else if (id === 'liftAngleUpperArmSlider') {
+            liftAngleUpper = value;
+            liftAngleUpperArmTextbox.value = value;
+        }
+    });
+
+    // Key event listeners for setting arm rotations
+    document.addEventListener('keydown', function (event) {
+        const key = event.key.toLowerCase();
+        switch(key){
+            case 'r':
+                // Start or stop animation
+                toggleButton.click();
+                break;
+            case 'e':
+                // Reset the arm to initial state
+                resetButton.click();
+                break;
+            case 'a':
+                // move lower arm left
+                armRadio[1].checked = true;
+                armLabel.style.display = 'block';
+                lowerArmRotation[0] -= 1;
+                armSlider.value = lowerArmRotation[0];
+                armTextbox.value = lowerArmRotation[0];
+                break;
+            case 's':
+                // move lower arm right
+                armRadio[1].checked = true;
+                lowerArmRotation[0] += 1;
+                armLabel.style.display = 'block';
+                armSlider.value = lowerArmRotation[0];
+                armTextbox.value = lowerArmRotation[0];
+                break;
+            case 'd':
+                // move middle arm left
+                armRadio[2].checked = true;
+                armLabel.style.display = 'block';
+                middleArmRotation[0] -= 1;
+                armSlider.value = middleArmRotation[0];
+                armTextbox.value = middleArmRotation[0];
+                break;
+            case 'f':
+                // move middle arm right
+                armRadio[2].checked = true;
+                armLabel.style.display = 'block';
+                middleArmRotation[0] += 1;
+                armSlider.value = middleArmRotation[0];
+                armTextbox.value = middleArmRotation[0];
+                break;
+            case 'q':
+                // move upper arm left
+                armRadio[3].checked = true;
+                armLabel.style.display = 'block';
+                upperArmRotation[0] -= 1;
+                armSlider.value = upperArmRotation[0];
+                armTextbox.value = upperArmRotation[0];
+                break;
+            case 'w':
+                // move upper arm right
+                armRadio[3].checked = true;
+                armLabel.style.display = 'block';
+                upperArmRotation[0] += 1;
+                armSlider.value = upperArmRotation[0];
+                armTextbox.value = upperArmRotation[0];
+                break;
             }
-        })
-    }
-
-    // Event listener for robot position slider and textbox
-    positionSlider.addEventListener('input', function () {
-        positionTextbox.value = parseFloat(positionSlider.value);
-        for (let i = 0; i < positionRadio.length; i++) {
-            if (positionRadio[i].checked) robotPosition[i] = parseFloat(positionSlider.value);
-        }
         render();
-    })
-
-    positionTextbox.addEventListener('input', function () {
-        if (positionTextbox.value >= 50) positionTextbox.value = 50;
-        else if (positionTextbox.value <= -50) positionTextbox.value = -50;
-        positionSlider.value = parseFloat(positionTextbox.value);
-        for (let i = 0; i < positionRadio.length; i++) {
-            if (positionRadio[i].checked) robotPosition[i] = parseFloat(positionTextbox.value);
-        }
-        render();
-    })
+    });
 }

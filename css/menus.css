@@ -83,3 +83,8 @@ body
     height: 1.25rem;
     margin-left: 0.3125rem;
 }
+
+.block {
+    display: block;
+    margin-top: 0.5rem;
+}

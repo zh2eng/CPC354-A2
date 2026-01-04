@@ -22,7 +22,8 @@ var position = [], theta = [], scaleNum = []
 var doAnimation = false; // flag to indicate if animation is running
 var isGripping = false; // flag to indicate if gripper is gripping the cube
 var animSeq = 0; // variable to track the current animation sequence
-var speed = 1; // speed of animation
+const initialSpeed = 1;
+var speed = initialSpeed; // speed of animation
 var animFrame; // variable to store the animation frame ID
 
 // Variables for the robot arms
@@ -54,16 +55,24 @@ const jointLength = 6.5; // From: Zhi Heng
 
 // Variables for arm and joint rotation
 // Default values
-const baseRotationInit = 0;
-const lowerArmRotationInit = [0, 0];
-const middleArmRotationInit = [0, 0];
-const upperArmRotationInit = [0, 0];
-const gripperRotationInit = 35;
-var baseRotation = baseRotationInit;
-var lowerArmRotation = [...lowerArmRotationInit]; // [arm angle, joint angle]
-var middleArmRotation = [...middleArmRotationInit]; // [arm angle, joint angle]
-var upperArmRotation = [...upperArmRotationInit]; // [arm angle, joint angle]
-var gripperRotation = gripperRotationInit; // gripper angle
+const baseRotationDefault = 0;
+const lowerArmRotationDefault = [0, 0];
+const middleArmRotationDefault = [0, 0];
+const upperArmRotationDefault = [0, 0];
+const gripperRotationDefault = 35;
+// initial rotation angles
+var baseRotationStart;
+var lowerArmRotationStart;
+var middleArmRotationStart;
+var upperArmRotationStart;
+var gripperRotationStart;
+// rotation angles at time of animation
+var baseRotation = baseRotationDefault;
+// [arm angle, joint angle]
+var lowerArmRotation = [...lowerArmRotationDefault]; 
+var middleArmRotation = [...middleArmRotationDefault];
+var upperArmRotation = [...upperArmRotationDefault];
+var gripperRotation = gripperRotationDefault; // gripper angle
 
 // Variables for ideal robot arm orientation for pickup and dropoff
 const lowerJoint = -25;
@@ -78,9 +87,8 @@ var liftAngleLower = 30;
 var liftAngleMiddle = 30;
 var liftAngleUpper = 30;
 
-// Variable for position of robot arm and cube
-const robotPositionInit = [0, -8, -50];
-var robotPosition = [...robotPositionInit];
+// Variable for position of cube and robot
+const robotPosition = [0, -8, -50];
 const cubePositionInit = [14, -8, -50];
 var cubePosition = [...cubePositionInit];
 
@@ -91,9 +99,8 @@ var worldSlider, worldTextbox;
 
 // Slider and textbox for robot arm
 var armRadio = [], armLabel, armRadioLabels = ["base", "lowerArm", "middleArm", "upperArm"];
-var positionRadio = [], positionLabel, positionRadioLabels = ["xPosition", "yPosition", "zPosition"];
-var index = 0, indexP = 0; // use for keydown function
-var jointSlider, jointTextbox, armSlider, armTextbox, positionSlider, positionTextbox;
+var index = 0; // use for keydown function
+var jointSlider, jointTextbox, armSlider, armTextbox;
 
 // Slider and textbox for gripper
 var gripperSlider, gripperTextbox;

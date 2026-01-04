@@ -1,4 +1,4 @@
-var length = 5.0;
+var length = 5.5;
 var cube = [
     vec4(-length, -length, -length, 1.0),
     vec4(-length,  length, -length, 1.0),
