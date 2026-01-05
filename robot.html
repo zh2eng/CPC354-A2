@@ -27,18 +27,63 @@
             // Declare the global variable(s) for draw calls
             uniform mat4 projectionMatrix;
             uniform mat4 modelViewMatrix;
-
+            uniform mat3 normalMatrix;
+ 
             // Declare the input variable(s) to receive per-vertex data from the application
             attribute vec4 vPosition;
             attribute vec4 vColor;
+            attribute vec3 vNormal;
+
+            //light properties
+            uniform vec4 ambientProduct;
+            uniform vec4 diffuseProduct;
+            uniform vec4 specularProduct;
+            uniform vec4 lightPosition;
+            uniform float shininess;
 
             // Declare the varying variable(s) to pass data to the fragment shader
             varying vec4 fColor;
 
             void main()
-            {
+            {   
+                vec3 pos = (modelViewMatrix * vPosition).xyz;
+                vec3 light = lightPosition.xyz;
+                // L = light vector
+                vec3 L;
+
+                //check for directional light
+                if(lightPosition.w == 0.0){
+                    L = normalize(lightPosition.xyz);
+                }else{
+                    L = normalize(lightPosition.xyz - pos);
+                }
+
+                // Calculate Eye Vector (E) and Half Vector (H) for specular light
+                vec3 E = -normalize(pos);
+                vec3 H = normalize(L + E);
+
+                //transform vertex normal into eye coordinates
+                vec3 N = normalize(normalMatrix * vNormal.xyz);
+
+                //compute lighting terms
+                vec4 ambient = ambientProduct;
+
+                float Kd = max(dot(L,N), 0.0);
+                vec4 diffuse = Kd * diffuseProduct;
+
+                float Ks = pow(max(dot(N,H), 0.0), shininess);
+                vec4 specular = Ks * specularProduct;
+
+                if(dot(L,N) < 0.0){
+                    specular = vec4(0.0, 0.0, 0.0, 1.0);
+                }
+
+                //final position
       	        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
-      	        fColor = vColor;
+
+                //combine 
+      	        fColor = vColor * (ambient + diffuse) + specular;
+                fColor.a = 1.0;
             }
         </script>
 
@@ -177,6 +222,55 @@
                         </div>
                     </div>
                 </div>
+                <label class="menus-label">Lightning Control</label><br>                    
+                    <div>
+                        <label class="instruction block">Ambient Intensity</label>
+                        <input 
+                            type="range" id="sliderAmbient" class="range-input" 
+                            min="0" max="1" step="0.1" value="0.5" title="Adjust Ambient Intensity"
+                        />
+                        <input 
+                            type="text" id="textboxAmbient" class="text-input" 
+                            min="0" max="1" step="0.1" value="0.5" title="Adjust Ambient Intensity"
+                        />
+                    </div>
+                    
+                    <div>
+                        <label class="instruction">Light X</label><br>
+                        <input 
+                            type="range" id="sliderLightX" class="range-input" 
+                            min="-100" max="100" step="1" value="0" title="Adjust Light X-axis"
+                        />
+                        <input 
+                            type="text" id="textboxLightX" class="text-input" 
+                            min="-100" max="100" step="1" value="0" title="Adjust Light X-axis"
+                        />
+                    </div>
+                    
+                    <div>
+                        <label class="instruction">Light Y</label><br>
+                        <input 
+                            type="range" id="sliderLightY" class="range-input"
+                            min="-100" max="100" step="1" value="100" title="Adjust Light Y-axis"
+                        />
+                        <input 
+                            type="text" id="textboxLightY" class="text-input" 
+                            min="-100" max="100" step="1" value="100" title="Adjust Light Y-axis"
+                        />
+                    </div>
+                    
+                    <div>
+                        <label class="instruction">Light Z</label><br>
+                        <input 
+                            type="range" id="sliderLightZ" class="range-input" 
+                            min="-100" max="100" step="1" value="0" title="Adjust Light Z-axis"
+                        />
+                        <input 
+                            type="text" id="textboxLightZ" class="text-input" 
+                            min="-100" max="100" step="1" value="0" title="Adjust Light Z-axis"
+                        />
+                    </div>
+                    
             </div>
         </div>
         <div class="canvas">

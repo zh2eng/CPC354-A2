@@ -43,6 +43,14 @@ function configWebGL() {
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
+    //normal
+    nBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(normals), gl.STATIC_DRAW);
+    vNormal = gl.getAttribLocation(program, "vNormal");
+    gl.vertexAttribPointer(vNormal, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vNormal);
+
     // Buffer for colors
     colBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colBuffer);
@@ -55,7 +63,7 @@ function configWebGL() {
     // Get the location of the uniform variables within a compiled shader program
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
     projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
-
+    normalMatrixLoc = gl.getUniformLocation(program, "normalMatrix");
     render();
 }
 
@@ -65,6 +73,12 @@ function render() {
     // projectionMatrix = orthogonal(-10, 10, -12, 12, 0.1, 100);
     projectionMatrix = perspective(45, canvas.width / canvas.height, 0.1, 100);
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+    //updates lightning
+    gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"), flatten(lightAmbient));
+    gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"), flatten(lightDiffuse));
+    gl.uniform4fv(gl.getUniformLocation(program, "specularProduct"), flatten(lightSpecular));
+    gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"), flatten(lightPosition));
+    gl.uniform1f(gl.getUniformLocation(program, "shininess"), materialShininess);
 
     animUpdate();
 }

@@ -1,14 +1,16 @@
-var length = 5.5;
-var cube = [
-    vec4(-length, -length, -length, 1.0),
-    vec4(-length,  length, -length, 1.0),
-    vec4( length,  length, -length, 1.0),
-    vec4( length, -length, -length, 1.0),
+// CHANGE 'length' TO 'cubeLen' TO AVOID CONFLICT
+var cubeLen = 5.5; 
 
-    vec4(-length, -length,  length, 1.0),
-    vec4(-length,  length,  length, 1.0),
-    vec4( length,  length,  length, 1.0),
-    vec4( length, -length,  length, 1.0),
+var cube = [
+    vec4(-cubeLen, -cubeLen, -cubeLen, 1.0),
+    vec4(-cubeLen,  cubeLen, -cubeLen, 1.0),
+    vec4( cubeLen,  cubeLen, -cubeLen, 1.0),
+    vec4( cubeLen, -cubeLen, -cubeLen, 1.0),
+
+    vec4(-cubeLen, -cubeLen,  cubeLen, 1.0),
+    vec4(-cubeLen,  cubeLen,  cubeLen, 1.0),
+    vec4( cubeLen,  cubeLen,  cubeLen, 1.0),
+    vec4( cubeLen, -cubeLen,  cubeLen, 1.0),
 ]
 
 setupCube = function() {

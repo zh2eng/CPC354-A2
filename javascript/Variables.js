@@ -6,9 +6,26 @@
 // Common webGL Variables
 /*************************************************************************************/
 var canvas, gl, program;
-var posBuffer, colBuffer, vPosition, vColor;
-var modelViewMatrixLoc, projectionMatrixLoc;
+var posBuffer, colBuffer, vPosition, vColor, nBuffer, vNormal;
+var modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc;
 var modelViewMatrix, projectionMatrix;
+var normals = [];
+
+/*************************************************************************************/
+// Ligfhtning Variables
+/*************************************************************************************/
+var lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
+var lightAmbient = vec4(0.5, 0.5, 0.5, 1.0);
+var lightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
+var lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
+
+var materialShininess = 60.0;
+
+var sliderLightX, sliderLightY, sliderLightZ;
+var sliderAmbient, sliderDiffuse, sliderSpecular;
+var sliderShininess;
+
+var textLightX, textLightY, textLightZ;
 
 /*************************************************************************************/
 // Variables for UI elements

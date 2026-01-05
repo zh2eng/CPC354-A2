@@ -21,6 +21,15 @@ function getUIElement() {
     armTextbox = document.getElementById('armTextbox');
     liftAngleSettings = document.getElementById('liftAngleSettings');
 
+    sliderAmbient = document.getElementById("sliderAmbient");
+    textboxAmbient = document.getElementById("textboxAmbient");
+    sliderLightX = document.getElementById("sliderLightX");
+    textboxLightX = document.getElementById("textboxLightX");
+    sliderLightY = document.getElementById("sliderLightY");
+    textboxLightY = document.getElementById("textboxLightY");
+    sliderLightZ = document.getElementById("sliderLightZ");
+    textboxLightZ = document.getElementById("textboxLightZ");
+
     // Event listener for the start/stop button
     toggleButton.addEventListener('click', function () {
         doAnimation = !doAnimation;
@@ -76,6 +85,17 @@ function getUIElement() {
         liftAngleMiddleArmSlider.value = 30;
         liftAngleUpperArmTextbox.value = 30;
         liftAngleUpperArmSlider.value = 30;
+        
+        sliderAmbient.value = 0.5;
+        textboxAmbient.value = 0.5;
+        sliderLightX.value = 0;
+        textboxLightX.value = 0;
+        sliderLightY.value = 100;
+        textboxLightY.value = 100;
+        sliderLightZ.value = 0;
+        textboxLightZ.value = 0;
+        lightAmbient = vec4(0.5, 0.5, 0.5, 1.0);
+        lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
         menus.style.display = 'block';
 
         render();
@@ -193,6 +213,60 @@ function getUIElement() {
             liftAngleUpper = value;
             liftAngleUpperArmTextbox.value = value;
         }
+    });
+
+    // Event listener for ligtning settings
+    // ambient
+    sliderAmbient.addEventListener('input', function() {
+        var val = parseFloat(sliderAmbient.value);
+        textboxAmbient.value = val;
+        lightAmbient = vec4(val, val, val, 1.0); 
+        render();
+    });
+    textboxAmbient.addEventListener('input', function() {
+        var val = parseFloat(textboxAmbient.value);
+        sliderAmbient.value = val;
+        lightAmbient = vec4(val, val, val, 1.0);
+        render();
+    });
+    //light X
+    sliderLightX.addEventListener('input', function() {
+        var val = parseFloat(sliderLightX.value);
+        textboxLightX.value = val;
+        lightPosition[0] = val; 
+        render();
+    });
+    textboxLightX.addEventListener('input', function() {
+        var val = parseFloat(textboxLightX.value);
+        sliderLightX.value = val;
+        lightPosition[0] = val;
+        render();
+    });
+    //light Y
+    sliderLightY.addEventListener('input', function() {
+        var val = parseFloat(sliderLightY.value);
+        textboxLightY.value = val;
+        lightPosition[1] = val; 
+        render();
+    });
+    textboxLightY.addEventListener('input', function() {
+        var val = parseFloat(textboxLightY.value);
+        sliderLightY.value = val;
+        lightPosition[1] = val;
+        render();
+    });
+    //light Z
+    sliderLightZ.addEventListener('input', function() {
+        var val = parseFloat(sliderLightZ.value);
+        textboxLightZ.value = val;
+        lightPosition[2] = val; 
+        render();
+    });
+    textboxLightZ.addEventListener('input', function() {
+        var val = parseFloat(textboxLightZ.value);
+        sliderLightZ.value = val;
+        lightPosition[2] = val;
+        render();
     });
 
     // Key event listeners for setting arm rotations
