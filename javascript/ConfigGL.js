@@ -83,17 +83,8 @@ animUpdate = function () {
         animate();
     }
 
-    // Start of Hierarchical Model
-    pushMatrix();
     setupRobotArm();
-    if (isGripping) {
-        // Include cube setup within the robot arm matrix stack
-        setUpCube();
-        popMatrix();
-    } else {
-        popMatrix();
-        setUpCube();
-    }
+    setUpCube();
     if (doAnimation) animFrame = requestAnimationFrame(animUpdate);
 }
 
@@ -141,10 +132,9 @@ setupRobotArm = function () {
 }
 
 setUpCube = function () {
-    // should be do animation and cube gripped, cube gripping to be added later
     if(isGripping){
         // translate the cube to be in front of the gripper
-        // translation of 2 units in the direction of upperArmRotation[1]
+        // using the model view matrix from the robot arm
         modelViewMatrix = mult(modelViewMatrix, translate(0, -8, 0));
         modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation));
     } else{
