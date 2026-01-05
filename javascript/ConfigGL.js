@@ -69,7 +69,7 @@ function configWebGL() {
 
 // Render the graphics for viewing
 function render() {
-    if(doAnimation){
+    if(animFrame){
         cancelAnimationFrame(animFrame);
     }
     // Pass a perspective projection matrix to the shader

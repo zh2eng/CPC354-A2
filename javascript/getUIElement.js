@@ -29,29 +29,7 @@ function getUIElement() {
     sliderLightY = document.getElementById("sliderLightY");
     textboxLightY = document.getElementById("textboxLightY");
     sliderLightZ = document.getElementById("sliderLightZ");
-    textboxLightZ = document.getElementById("textboxLightZ");
-
-    // Event listener for the start/stop button
-    toggleButton.addEventListener('click', function () {
-        doAnimation = !doAnimation;
-        if (doAnimation) {
-            toggleButton.innerHTML = '<span>&#9724;</span> Stop';
-            toggleButton.className = 'base-btn stop-btn';
-            menus.style.display = 'none';
-            baseRotationStart = baseRotation;
-            lowerArmRotationStart = lowerArmRotation;
-            middleArmRotationStart = middleArmRotation;
-            upperArmRotationStart = upperArmRotation;
-            gripperRotationStart = gripperRotation;
-            render();
-        }
-        else {
-            toggleButton.innerHTML = '<span>&#9654;</span> Start';
-            toggleButton.className = 'base-btn start-btn';
-            menus.style.display = 'block';
-        }
-        render();
-    });
+    textboxLightZ = document.getElementById("textboxLightZ");    
 
 	// Event listener for the start/stop button
 	toggleButton.addEventListener('click', startAnimation);
@@ -182,6 +160,59 @@ function getUIElement() {
 				break;
 		}
 	});
+    // Event listener for ligtning settings
+    // ambient
+    sliderAmbient.addEventListener('input', function() {
+        var val = parseFloat(sliderAmbient.value);
+        textboxAmbient.value = val;
+        lightAmbient = vec4(val, val, val, 1.0); 
+        render();
+    });
+    textboxAmbient.addEventListener('input', function() {
+        var val = parseFloat(textboxAmbient.value);
+        sliderAmbient.value = val;
+        lightAmbient = vec4(val, val, val, 1.0);
+        render();
+    });
+    //light X
+    sliderLightX.addEventListener('input', function() {
+        var val = parseFloat(sliderLightX.value);
+        textboxLightX.value = val;
+        lightPosition[0] = val; 
+        render();
+    });
+    textboxLightX.addEventListener('input', function() {
+        var val = parseFloat(textboxLightX.value);
+        sliderLightX.value = val;
+        lightPosition[0] = val;
+        render();
+    });
+    //light Y
+    sliderLightY.addEventListener('input', function() {
+        var val = parseFloat(sliderLightY.value);
+        textboxLightY.value = val;
+        lightPosition[1] = val; 
+        render();
+    });
+    textboxLightY.addEventListener('input', function() {
+        var val = parseFloat(textboxLightY.value);
+        sliderLightY.value = val;
+        lightPosition[1] = val;
+        render();
+    });
+    //light Z
+    sliderLightZ.addEventListener('input', function() {
+        var val = parseFloat(sliderLightZ.value);
+        textboxLightZ.value = val;
+        lightPosition[2] = val; 
+        render();
+    });
+    textboxLightZ.addEventListener('input', function() {
+        var val = parseFloat(textboxLightZ.value);
+        sliderLightZ.value = val;
+        lightPosition[2] = val;
+        render();
+    });
 
 	// Key event listeners for setting arm rotations
 	document.addEventListener('keydown', function (event) {
@@ -280,130 +311,6 @@ function startAnimation() {
 	render();
 }
 
-    // Event listener for ligtning settings
-    // ambient
-    sliderAmbient.addEventListener('input', function() {
-        var val = parseFloat(sliderAmbient.value);
-        textboxAmbient.value = val;
-        lightAmbient = vec4(val, val, val, 1.0); 
-        render();
-    });
-    textboxAmbient.addEventListener('input', function() {
-        var val = parseFloat(textboxAmbient.value);
-        sliderAmbient.value = val;
-        lightAmbient = vec4(val, val, val, 1.0);
-        render();
-    });
-    //light X
-    sliderLightX.addEventListener('input', function() {
-        var val = parseFloat(sliderLightX.value);
-        textboxLightX.value = val;
-        lightPosition[0] = val; 
-        render();
-    });
-    textboxLightX.addEventListener('input', function() {
-        var val = parseFloat(textboxLightX.value);
-        sliderLightX.value = val;
-        lightPosition[0] = val;
-        render();
-    });
-    //light Y
-    sliderLightY.addEventListener('input', function() {
-        var val = parseFloat(sliderLightY.value);
-        textboxLightY.value = val;
-        lightPosition[1] = val; 
-        render();
-    });
-    textboxLightY.addEventListener('input', function() {
-        var val = parseFloat(textboxLightY.value);
-        sliderLightY.value = val;
-        lightPosition[1] = val;
-        render();
-    });
-    //light Z
-    sliderLightZ.addEventListener('input', function() {
-        var val = parseFloat(sliderLightZ.value);
-        textboxLightZ.value = val;
-        lightPosition[2] = val; 
-        render();
-    });
-    textboxLightZ.addEventListener('input', function() {
-        var val = parseFloat(textboxLightZ.value);
-        sliderLightZ.value = val;
-        lightPosition[2] = val;
-        render();
-    });
-
-    // Key event listeners for setting arm rotations
-    document.addEventListener('keydown', function (event) {
-        const key = event.key.toLowerCase();
-        switch(key){
-            case 'r':
-                // Start or stop animation
-                toggleButton.click();
-                break;
-            case 'e':
-                // Reset the arm to initial state
-                resetButton.click();
-                break;
-            case 'a':
-                // move lower arm left
-                armRadio[1].checked = true;
-                armLabel.style.display = 'block';
-                jointLabel.style.display = 'none';
-                lowerArmRotation -= 1;
-                armSlider.value = lowerArmRotation;
-                armTextbox.value = lowerArmRotation;
-                break;
-            case 's':
-                // move lower arm right
-                armRadio[1].checked = true;
-                lowerArmRotation += 1;
-                armLabel.style.display = 'block';
-                jointLabel.style.display = 'none';
-                armSlider.value = lowerArmRotation;
-                armTextbox.value = lowerArmRotation;
-                break;
-            case 'd':
-                // move middle arm left
-                armRadio[2].checked = true;
-                armLabel.style.display = 'block';
-                jointLabel.style.display = 'none';
-                middleArmRotation -= 1;
-                armSlider.value = middleArmRotation;
-                armTextbox.value = middleArmRotation;
-                break;
-            case 'f':
-                // move middle arm right
-                armRadio[2].checked = true;
-                armLabel.style.display = 'block';
-                jointLabel.style.display = 'none';
-                middleArmRotation += 1;
-                armSlider.value = middleArmRotation;
-                armTextbox.value = middleArmRotation;
-                break;
-            case 'q':
-                // move upper arm left
-                armRadio[3].checked = true;
-                armLabel.style.display = 'block';
-                jointLabel.style.display = 'none';
-                upperArmRotation -= 1;
-                armSlider.value = upperArmRotation;
-                armTextbox.value = upperArmRotation;
-                break;
-            case 'w':
-                // move upper arm right
-                armRadio[3].checked = true;
-                armLabel.style.display = 'block';
-                jointLabel.style.display = 'none';
-                upperArmRotation += 1;
-                armSlider.value = upperArmRotation;
-                armTextbox.value = upperArmRotation;
-                break;
-            }
-        render();
-    });
-    
 function resetAnimation() {
 	// Reset all variables to initial state
 	doAnimation = false;
@@ -436,6 +343,18 @@ function resetAnimation() {
 	cubePosition = [...cubePositionInit];
 	jointSlider.value = baseRotationDefault;
 	jointTextbox.value = baseRotationDefault;
+
+    sliderAmbient.value = 1;
+    textboxAmbient.value = 1;
+    sliderLightX.value = 0;
+    textboxLightX.value = 0;
+    sliderLightY.value = 100;
+    textboxLightY.value = 100;
+    sliderLightZ.value = 0;
+    textboxLightZ.value = 0;
+    lightAmbient = vec4(0.5, 0.5, 0.5, 1.0);
+    lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
+
 	menus.style.display = 'block';
 
 	render();

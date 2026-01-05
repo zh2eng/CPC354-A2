@@ -25,7 +25,7 @@ var sliderLightX, sliderLightY, sliderLightZ;
 var sliderAmbient, sliderDiffuse, sliderSpecular;
 var sliderShininess;
 
-var textLightX, textLightY, textLightZ;
+var textboxAmbient, textboxLightX, textboxLightY, textboxLightZ;
 
 /*************************************************************************************/
 // Variables for UI elements
