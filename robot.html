@@ -139,41 +139,20 @@
                         />
                     </div>
                 </div>
-                <div id="liftAngleSettings">
-                    <label for="liftAngle" class="menus-label">Lift Angle Settings</label>
-                    <div>
-                        <label for="liftAngleLowerArm" class="instruction block">Lift angles of lower arm</label>
+                <div id="dropofflocations">
+                    <label class="menus-label">Cube Drop-off Location</label><br>
+                    <div class="radio-labels-column">
                         <div>
-                            <input
-                                type="range" id="liftAngleLowerArmSlider" class="range-input"
-                                min="0" max="90" value="30" step="1" title="Lift angles of lower arm"
-                            >
-                            <input 
-                                type="text" id="liftAngleLowerArmTextbox" class="text-input"
-                                min="0" max="90" value="30" step="1" title="Lift angles of lower arm"
-                            >
+                            <input type="checkbox" id="leftDropoff" name="dropoffLocation" checked />
+                            <label for="leftDropoff" class="instruction">Left Side</label>
                         </div>
-                        <label for="liftAngleMiddleArm" class="instruction block">Lift angles of middle arm</label>
                         <div>
-                            <input
-                                type="range" id="liftAngleMiddleArmSlider" class="range-input"
-                                min="0" max="90" value="30" step="1" title="Lift angles of middle arm"
-                            >
-                            <input 
-                                type="text" id="liftAngleMiddleArmTextbox" class="text-input"
-                                min="0" max="90" value="30" step="1" title="Lift angles of middle arm"
-                            >
+                            <input type="checkbox" id="frontDropoff" name="dropoffLocation" checked/>
+                            <label for="frontDropoff" class="instruction">Center - front</label>
                         </div>
-                        <label for="liftAngleUpperArm" class="instruction block">Lift angles of upper arm</label>
                         <div>
-                            <input
-                                type="range" id="liftAngleUpperArmSlider" class="range-input"
-                                min="0" max="90" value="30" step="1" title="Lift angles of upper arm"
-                            >
-                            <input 
-                                type="text" id="liftAngleUpperArmTextbox" class="text-input"
-                                min="0" max="90" value="30" step="1" title="Lift angles of upper arm"
-                            >
+                            <input type="checkbox" id="backDropoff" name="dropoffLocation" checked/>
+                            <label for="backDropoff" class="instruction">Center - back</label>
                         </div>
                     </div>
                 </div>

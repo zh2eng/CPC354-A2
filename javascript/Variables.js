@@ -25,6 +25,10 @@ var animSeq = 0; // variable to track the current animation sequence
 const initialSpeed = 1;
 var speed = initialSpeed; // speed of animation
 var animFrame; // variable to store the animation frame ID
+var cubeAtIdx = 0; // current cube position
+const cubeDestinationsInit = [0, -90, -180, -270]; // initial possible cube positions
+var cubeDestinations = [...cubeDestinationsInit]; 
+var timeoutHolder; // to hold timeout for pause
 
 // Variables for the robot arms
 var points = [], colors = [];
@@ -75,7 +79,7 @@ var upperArmRotation = upperArmRotationDefault;
 var gripperRotation = gripperRotationDefault; // gripper angle
 
 // Variables for ideal robot arm orientation for pickup and dropoff
-const lowerJoint = -25;
+const lowerJoint = -27;
 const middleJoint = -48;
 const upperJoint = -93;
 const gripperPosition = 3;
@@ -83,9 +87,9 @@ const gripperPosition = 3;
 // Variables for selected paths
 // Note: lift angles are relative to ideal angles
 // Applies in both display and calculations
-var liftAngleLower = 30;
-var liftAngleMiddle = 30;
-var liftAngleUpper = 30;
+const liftAngleLower = 30;
+const liftAngleMiddle = 30;
+const liftAngleUpper = 30;
 
 // Variable for position of cube and robot
 const robotPosition = [0, -8, -50];

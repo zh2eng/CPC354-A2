@@ -8,7 +8,7 @@ function animate() {
       const middleJointSign = Math.sign(middleJoint - middleArmRotation);
       const lowerJointSign = Math.sign(lowerJoint - lowerArmRotation);
       let hasReachedPosition = [false, false, false, false, false];
-
+      
       // Upper arm rotation
       if (Math.abs(upperJoint - upperArmRotation) <= scaledSpeed) {
         upperArmRotation = upperJoint;
@@ -16,7 +16,7 @@ function animate() {
       } else {
         upperArmRotation += scaledSpeed * upperJointSign * 3.5;
       }
-
+      
       // Middle arm rotation
       if (Math.abs(middleJoint - middleArmRotation) <= scaledSpeed) {
         middleArmRotation = middleJoint;
@@ -25,7 +25,7 @@ function animate() {
       else {
         middleArmRotation += scaledSpeed * middleJointSign * 1.3;
       }
-
+      
       // Lower arm rotation
       if (Math.abs(lowerJoint - lowerArmRotation) <= scaledSpeed) {
         lowerArmRotation = lowerJoint;
@@ -33,7 +33,7 @@ function animate() {
       } else {
         lowerArmRotation += scaledSpeed * lowerJointSign;
       }
-
+      
       // Gripper opening
       if (gripperRotation > -30 + 2 * scaledSpeed) {
         gripperRotation -= 6 * scaledSpeed;
@@ -41,17 +41,19 @@ function animate() {
         gripperRotation = -30;
         hasReachedPosition[3] = true;
       }
-
-      // Rotate back to initial base rotation (0 degrees)
-      if (Math.abs(baseRotation) <= speed) {
-        baseRotation = 0;
+      
+      // Rotate to face cube
+      cubeAngle = cubeDestinations[cubeAtIdx];
+      if (Math.abs(cubeAngle - baseRotation) <= speed) {
+        baseRotation = cubeAngle;
         hasReachedPosition[4] = true;
       } else {
-        baseRotation -= Math.sign(baseRotation) * speed;
+        baseRotation -= speed * Math.sign(baseRotation - cubeAngle);
       }
 
       // When all parts are in position, move to next sequence
       if (hasReachedPosition.every(Boolean)) {
+        
         animSeq++;
       }
       break;
@@ -63,6 +65,7 @@ function animate() {
       } else {
         gripperRotation = gripperPosition;
         isGripping = true;
+        cubeAtIdx = (cubeAtIdx + 1) % cubeDestinations.length; // Update to next cube position
         animSeq++;
       }
       break;
@@ -87,18 +90,21 @@ function animate() {
       if (lowerArmRotation === lowerJoint + liftAngleLower &&
         middleArmRotation === middleJoint + liftAngleMiddle &&
         upperArmRotation === upperJoint + liftAngleUpper) {
+        cubeAngle = -180
         animSeq++;
       }
       break;
 
     case 3:
-      // Rotate to face drop-off location on the left side (-180 degrees)
-      if (baseRotation > speed - 180) {
-        baseRotation -= speed;
-      } else {
-        baseRotation = -180;
+      // Rotate to face drop-off location on the other side
+      cubeAngle = cubeDestinations[cubeAtIdx] === 0 ? -360 : cubeDestinations[cubeAtIdx];
+      if (Math.abs(cubeAngle - baseRotation) <= speed) {
+        baseRotation = cubeAngle === -360 ? 0 : cubeAngle;
         animSeq++;
+      } else {
+        baseRotation -= speed * Math.sign(baseRotation - cubeAngle);
       }
+
       break;
 
     case 4:
@@ -124,11 +130,16 @@ function animate() {
         animSeq++;
       }
       break;
-
+    
     case 5:
-      // Open grippers, mark cube as released
+      // Minor case: for setting isGripping, cubeAngle and cubePosition
       isGripping = false;
-      cubePosition = [-14, -8, -50]; // Set cube to drop-off position
+      updateCubePosition();
+      animSeq++;
+      break;
+
+    case 6:
+      // Open grippers, mark cube as released
       if (gripperRotation > -30 + 2 * scaledSpeed) {
         gripperRotation -= 2 * scaledSpeed;
       } else {
@@ -137,13 +148,13 @@ function animate() {
       }
       break;
 
-    case 6:
+    case 7:
       // Lift all arms away from cube and back to initial position
       const lowerArmSign = Math.sign(lowerArmRotationStart - lowerArmRotation);
       const middleArmSign = Math.sign(middleArmRotationStart - middleArmRotation);
       const upperArmSign = Math.sign(upperArmRotationStart - upperArmRotation);
       const gripperSign = Math.sign(gripperRotationStart - gripperRotation);
-      let hasReturnedToOrigin = [false, false, false, false, false];
+      let hasReturnedToOrigin = [false, false, false, false];
 
       if (Math.abs(lowerArmRotationStart - lowerArmRotation) <= speed) {
         lowerArmRotation = lowerArmRotationStart;
@@ -170,28 +181,39 @@ function animate() {
       } else {
         gripperRotation += speed * gripperSign * 2;
       }
-      // Rotate back to initial base rotation (0 degrees)
-      if (Math.abs(baseRotation) <= speed) {
-        baseRotation = 0;
-        hasReturnedToOrigin[4] = true;
-      } else {
-        baseRotation -= Math.sign(baseRotation) * speed;
-      }
       if (hasReturnedToOrigin.every(Boolean)) {
         animSeq++;
       }
       break;
 
-    case 7:
-      // Teleport cube back to initial position
-      cubePosition = [...cubePositionInit];
-      animSeq++;
-      break;
     case 8:
-      // Start again from sequence 0
-      animSeq = 0;
+      // Short pause at the end of the animation
+      timeoutHolder = !timeoutHolder && setTimeout(() => {
+        // Reset to sequence 0 to allow re-running the animation
+        animSeq = 0;
+        timeoutHolder = null;
+      }, 500);
+      break;
+
     default: return;
   }
 }
 
+function updateCubePosition() {
+  const angleRad = cubeDestinations[cubeAtIdx] * (Math.PI / 180);
 
+
+  const centerX = robotPosition[0];
+  const centerZ = robotPosition[2];
+  const radius = cubePositionInit[0] - centerX; // initial distance from robot to cube
+
+  // Apply the rotation formula
+  // x = cx + r * cos(theta)
+  // z = cz - r * sin(theta)
+  const newX = centerX + radius * Math.cos(angleRad);
+  const newZ = centerZ - radius * Math.sin(angleRad);
+
+  // 4. Update the actual position array
+  cubePosition[0] = newX;
+  cubePosition[2] = newZ;
+}
