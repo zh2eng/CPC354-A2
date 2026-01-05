@@ -20,6 +20,7 @@ function getUIElement() {
 	armSlider = document.getElementById('armSlider');
 	armTextbox = document.getElementById('armTextbox');
 	dropofflocations = document.getElementById('dropofflocations');
+	grippedNotif = document.getElementById('gripped_notif');
 
 	// Event listener for the start/stop button
 	toggleButton.addEventListener('click', startAnimation);
@@ -174,7 +175,7 @@ function getUIElement() {
 				armSlider.value = lowerArmRotation;
 				armTextbox.value = lowerArmRotation;
 				break;
-			case '3':
+			case '4':
 				// move middle arm left
 				armRadio[2].checked = true;
 				armLabel.style.display = 'block';
@@ -183,7 +184,7 @@ function getUIElement() {
 				armSlider.value = middleArmRotation;
 				armTextbox.value = middleArmRotation;
 				break;
-			case '4':
+			case '5':
 				// move middle arm right
 				armRadio[2].checked = true;
 				armLabel.style.display = 'block';
@@ -192,7 +193,7 @@ function getUIElement() {
 				armSlider.value = middleArmRotation;
 				armTextbox.value = middleArmRotation;
 				break;
-			case '5':
+			case '7':
 				// move upper arm left
 				armRadio[3].checked = true;
 				armLabel.style.display = 'block';
@@ -201,7 +202,7 @@ function getUIElement() {
 				armSlider.value = upperArmRotation;
 				armTextbox.value = upperArmRotation;
 				break;
-			case '6':
+			case '8':
 				// move upper arm right
 				armRadio[3].checked = true;
 				armLabel.style.display = 'block';
@@ -210,14 +211,26 @@ function getUIElement() {
 				armSlider.value = upperArmRotation;
 				armTextbox.value = upperArmRotation;
 				break;
+			case '9':
+				// open gripper
+				gripperRotation += 1;
+				gripperSlider.value = gripperRotation + 20;
+				gripperTextbox.value = gripperRotation + 20;
+				break;
+			case '6':
+				// close gripper
+				gripperRotation -= 1;
+				gripperSlider.value = gripperRotation + 20;
+				gripperTextbox.value = gripperRotation + 20;
+				break;
 		}
 		render();
 	});
 }
 
 function startAnimation() {
-	console.log("Toggled animation");
 	doAnimation = !doAnimation;
+	isGripping = false; // reset gripping state when starting/stopping animation
 	if (doAnimation) {
 		toggleButton.innerHTML = '<span>&#9724;</span> Stop';
 		toggleButton.className = 'base-btn stop-btn';
@@ -227,9 +240,9 @@ function startAnimation() {
 		middleArmRotationStart = middleArmRotation;
 		upperArmRotationStart = upperArmRotation;
 		gripperRotationStart = gripperRotation;
-		render();
 	}
 	else {
+		cancelAnimationFrame(animFrame); // Cancel pending animation frame
 		toggleButton.innerHTML = '<span>&#9654;</span> Start';
 		toggleButton.className = 'base-btn start-btn';
 		menus.style.display = 'block';
@@ -239,10 +252,11 @@ function startAnimation() {
 
 function resetAnimation() {
 	// Reset all variables to initial state
+	doAnimation = false;
+	cancelAnimationFrame(animFrame); // Cancel any pending animation frame
 	isGripping = false;
 	cubeAtIdx = 0;
 	cubeDestinations = [...cubeDestinationsInit];
-	doAnimation = false;
 	animSeq = 0;
 	toggleButton.innerHTML = '<span>&#9654;</span> Start';
 	toggleButton.className = 'base-btn start-btn';
@@ -256,7 +270,7 @@ function resetAnimation() {
 	document.getElementById('backDropoff').checked = true;
 	speed = initialSpeed;
 	worldScale = worldScaleInit;
-
+	
 	// Reset all UI elements to initial state
 	worldSlider.value = worldScaleInit * 10;
 	worldTextbox.value = worldScaleInit * 10;
@@ -266,6 +280,8 @@ function resetAnimation() {
 	speedTextbox.value = initialSpeed;
 	armRadio[0].checked = true;
 	cubePosition = [...cubePositionInit];
+	jointSlider.value = baseRotationDefault;
+	jointTextbox.value = baseRotationDefault;
 	menus.style.display = 'block';
 
 	render();

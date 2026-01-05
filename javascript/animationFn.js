@@ -53,7 +53,6 @@ function animate() {
 
       // When all parts are in position, move to next sequence
       if (hasReachedPosition.every(Boolean)) {
-        
         animSeq++;
       }
       break;
@@ -216,4 +215,38 @@ function updateCubePosition() {
   // 4. Update the actual position array
   cubePosition[0] = newX;
   cubePosition[2] = newZ;
+}
+
+// function animateCubeFalling() {
+//   if (cubePosition[1] > -8 && !isGripping) {
+//     cubePosition[1] -= 0.5 * speed;
+//   }
+// }
+
+function gripCubeOutOfAnimation(){
+  // angle = tan-1((z2-z1)/(x2-x1))
+  if(gripperRotation < gripperPosition - 2){
+    isGripping = false;
+    cubePosition[0] = robotPosition[0] + 14 * Math.cos(-baseRotation * (Math.PI / 180));
+    cubePosition[2] = robotPosition[2] - 14 * Math.sin(-baseRotation * (Math.PI / 180));
+    return;
+  }
+  const cubeAngle = -1 * Math.atan2(cubePosition[2] - robotPosition[2], cubePosition[0] - robotPosition[0])
+  * (180 / Math.PI);
+  const tolerance = 20;
+  if(Math.abs(cubeAngle - baseRotation) < 5 &&
+    Math.abs(lowerArmRotation - lowerJoint) < tolerance &&
+    Math.abs(middleArmRotation - middleJoint) < tolerance &&
+    Math.abs(upperArmRotation - upperJoint) < tolerance){
+      isGripping = true;
+  }
+  // Alternate arrangement
+  if(Math.abs(cubeAngle - baseRotation) < 5 &&
+    Math.abs(lowerArmRotation) < tolerance && 
+    Math.abs(middleArmRotation - (-90)) < tolerance &&
+    upperArmRotation <= -45 &&
+    upperArmRotation >= (-45 - tolerance)
+  ){
+    isGripping = true;
+  }
 }

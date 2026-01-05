@@ -61,6 +61,9 @@ function configWebGL() {
 
 // Render the graphics for viewing
 function render() {
+    if(doAnimation){
+        cancelAnimationFrame(animFrame);
+    }
     // Pass a perspective projection matrix to the shader
     // projectionMatrix = orthogonal(-10, 10, -12, 12, 0.1, 100);
     projectionMatrix = perspective(45, canvas.width / canvas.height, 0.1, 100);
@@ -81,11 +84,23 @@ animUpdate = function () {
 
     if(doAnimation){
         animate();
+    } else{
+        // Function scope: Only for manual gripping when not animating
+        // Dynamically set isGripping based on arm orientation and cube position
+        gripCubeOutOfAnimation();
+        // Animate cube falling
+        // animateCubeFalling();
     }
+
+    // If gripping, show notification
+    // Implemented here to avoid redundant code in animUpdate and animate functions
+    grippedNotif.style.display = isGripping ? 'block' : 'none';
 
     setupRobotArm();
     setUpCube();
-    if (doAnimation) animFrame = requestAnimationFrame(animUpdate);
+
+    // doAnimation does not need to be true to keep animating the cube falling 
+    animFrame = requestAnimationFrame(animUpdate);
 }
 
 setupRobotArm = function () {
