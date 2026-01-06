@@ -22,14 +22,16 @@ function getUIElement() {
 	dropofflocations = document.getElementById('dropofflocations');
 	grippedNotif = document.getElementById('gripped_notif');
 
-    sliderAmbient = document.getElementById("sliderAmbient");
-    textboxAmbient = document.getElementById("textboxAmbient");
-    sliderLightX = document.getElementById("sliderLightX");
-    textboxLightX = document.getElementById("textboxLightX");
-    sliderLightY = document.getElementById("sliderLightY");
-    textboxLightY = document.getElementById("textboxLightY");
-    sliderLightZ = document.getElementById("sliderLightZ");
-    textboxLightZ = document.getElementById("textboxLightZ");    
+	pointLightRadio = document.getElementById("pointLight");
+	directionalLightRadio = document.getElementById("directionalLight");
+  sliderAmbient = document.getElementById("sliderAmbient");
+  textboxAmbient = document.getElementById("textboxAmbient");
+  sliderLightX = document.getElementById("sliderLightX");
+  textboxLightX = document.getElementById("textboxLightX");
+  sliderLightY = document.getElementById("sliderLightY");
+  textboxLightY = document.getElementById("textboxLightY");
+  sliderLightZ = document.getElementById("sliderLightZ");
+  textboxLightZ = document.getElementById("textboxLightZ");    
 
 	// Event listener for the start/stop button
 	toggleButton.addEventListener('click', startAnimation);
@@ -160,59 +162,86 @@ function getUIElement() {
 				break;
 		}
 	});
-    // Event listener for ligtning settings
-    // ambient
-    sliderAmbient.addEventListener('input', function() {
-        var val = parseFloat(sliderAmbient.value);
-        textboxAmbient.value = val;
-        lightAmbient = vec4(val, val, val, 1.0); 
-        render();
-    });
-    textboxAmbient.addEventListener('input', function() {
-        var val = parseFloat(textboxAmbient.value);
-        sliderAmbient.value = val;
-        lightAmbient = vec4(val, val, val, 1.0);
-        render();
-    });
-    //light X
-    sliderLightX.addEventListener('input', function() {
-        var val = parseFloat(sliderLightX.value);
-        textboxLightX.value = val;
-        lightPosition[0] = val; 
-        render();
-    });
-    textboxLightX.addEventListener('input', function() {
-        var val = parseFloat(textboxLightX.value);
-        sliderLightX.value = val;
-        lightPosition[0] = val;
-        render();
-    });
-    //light Y
-    sliderLightY.addEventListener('input', function() {
-        var val = parseFloat(sliderLightY.value);
-        textboxLightY.value = val;
-        lightPosition[1] = val; 
-        render();
-    });
-    textboxLightY.addEventListener('input', function() {
-        var val = parseFloat(textboxLightY.value);
-        sliderLightY.value = val;
-        lightPosition[1] = val;
-        render();
-    });
-    //light Z
-    sliderLightZ.addEventListener('input', function() {
-        var val = parseFloat(sliderLightZ.value);
-        textboxLightZ.value = val;
-        lightPosition[2] = val; 
-        render();
-    });
-    textboxLightZ.addEventListener('input', function() {
-        var val = parseFloat(textboxLightZ.value);
-        sliderLightZ.value = val;
-        lightPosition[2] = val;
-        render();
-    });
+	//helper for lightning
+	function resetLighttoDefault(isPoint){
+		lightPosition = vec4(53.0, 39.0, -10.0, isPoint ? 1.0 : 0.0);
+		lightAmbient = vec4(1.0, 1.0, 1.0, 1.0);
+
+		sliderLightX.value = 53;   
+		textboxLightX.value = 53;
+    sliderLightY.value = 39; 
+		textboxLightY.value = 39;
+    sliderLightZ.value = -10;   
+		textboxLightZ.value = -10;
+    sliderAmbient.value = 1;  
+		textboxAmbient.value = 1;
+		render();
+	}
+  // Event listener for ligtning settings
+	pointLightRadio.addEventListener('change', function(){
+		if(pointLightRadio.checked){
+			resetLighttoDefault(true);
+		}
+	});
+
+	directionalLightRadio.addEventListener('change', function(){
+		if(directionalLightRadio.checked){
+			resetLighttoDefault(false);
+		}
+	});
+
+  // ambient
+  sliderAmbient.addEventListener('input', function() {
+    var val = parseFloat(sliderAmbient.value);
+    textboxAmbient.value = val;
+    lightAmbient = vec4(val, val, val, 1.0); 
+    render();
+  });
+  textboxAmbient.addEventListener('input', function() {
+    var val = parseFloat(textboxAmbient.value);
+    sliderAmbient.value = val;
+    lightAmbient = vec4(val, val, val, 1.0);
+    render();
+  });
+  //light X
+  sliderLightX.addEventListener('input', function() {
+    var val = parseFloat(sliderLightX.value);
+    textboxLightX.value = val;
+    lightPosition[0] = val; 
+    render();
+  });
+  textboxLightX.addEventListener('input', function() {
+    var val = parseFloat(textboxLightX.value);
+    sliderLightX.value = val;
+    lightPosition[0] = val;
+    render();
+  });
+  //light Y
+  sliderLightY.addEventListener('input', function() {
+    var val = parseFloat(sliderLightY.value);
+    textboxLightY.value = val;
+    lightPosition[1] = val; 
+    render();
+  });
+  textboxLightY.addEventListener('input', function() {
+    var val = parseFloat(textboxLightY.value);
+    sliderLightY.value = val;
+    lightPosition[1] = val;
+    render();
+  });
+  //light Z
+  sliderLightZ.addEventListener('input', function() {
+    var val = parseFloat(sliderLightZ.value);
+    textboxLightZ.value = val;
+    lightPosition[2] = val; 
+    render();
+  });
+  textboxLightZ.addEventListener('input', function() {
+    var val = parseFloat(textboxLightZ.value);
+    sliderLightZ.value = val;
+    lightPosition[2] = val;
+    render();
+  });
 
 	// Key event listeners for setting arm rotations
 	document.addEventListener('keydown', function (event) {
@@ -344,17 +373,17 @@ function resetAnimation() {
 	jointSlider.value = baseRotationDefault;
 	jointTextbox.value = baseRotationDefault;
 
-    sliderAmbient.value = 1;
-    textboxAmbient.value = 1;
-    sliderLightX.value = 0;
-    textboxLightX.value = 0;
-    sliderLightY.value = 100;
-    textboxLightY.value = 100;
-    sliderLightZ.value = 0;
-    textboxLightZ.value = 0;
-    lightAmbient = vec4(0.5, 0.5, 0.5, 1.0);
-    lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
-
+  sliderAmbient.value = 1;
+  textboxAmbient.value = 1;
+  sliderLightX.value = 53;
+  textboxLightX.value = 53;
+  sliderLightY.value = 39;
+  textboxLightY.value = 39;
+  sliderLightZ.value = -10;
+  textboxLightZ.value = -10;
+  lightPosition = vec4(53.0, 39.0, -10.0, 1.0);
+  lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
+	document.getElementById("pointLight").checked = true;
 	menus.style.display = 'block';
 
 	render();

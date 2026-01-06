@@ -14,12 +14,12 @@ var normals = [];
 /*************************************************************************************/
 // Ligfhtning Variables
 /*************************************************************************************/
-var lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
-var lightAmbient = vec4(0.5, 0.5, 0.5, 1.0);
+var lightPosition = vec4(53.0, 39.0, -10.0, 1.0);
+var lightAmbient = vec4(1.0, 1.0, 1.0, 1.0);
 var lightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
 var lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 
-var materialShininess = 60.0;
+var materialShininess = 100.0;
 
 var sliderLightX, sliderLightY, sliderLightZ;
 var sliderAmbient, sliderDiffuse, sliderSpecular;
