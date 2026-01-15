@@ -173,8 +173,8 @@ function getUIElement() {
 		textboxLightY.value = 39;
     sliderLightZ.value = -10;   
 		textboxLightZ.value = -10;
-    sliderAmbient.value = 1.0;  
-		textboxAmbient.value = 1.0;
+    sliderAmbient.value = 1.3;  
+		textboxAmbient.value = 1.3;
 		render();
 	}
   // Event listener for ligtning settings
@@ -372,8 +372,8 @@ function resetAnimation() {
 	jointSlider.value = baseRotationDefault;
 	jointTextbox.value = baseRotationDefault;
 
-  sliderAmbient.value = 1.0;
-  textboxAmbient.value = 1.0;
+  sliderAmbient.value = 1.3;
+  textboxAmbient.value = 1.3;
   sliderLightX.value = 53;
   textboxLightX.value = 53;
   sliderLightY.value = 39;
