@@ -373,6 +373,7 @@ function resetAnimation() {
 	jointSlider.value = baseRotationDefault;
 	jointTextbox.value = baseRotationDefault;
 
+	//all light variables
   sliderAmbient.value = 1;
   textboxAmbient.value = 1;
   sliderLightX.value = 53;
