@@ -4,8 +4,8 @@ function getUIElement() {
 	menus = document.getElementById("menus");
 	toggleButton = document.getElementById('toggleButton');
 	resetButton = document.getElementById('reset');
-	worldSlider = document.getElementById('worldSlider');
-	worldTextbox = document.getElementById('worldTextbox');
+	// worldSlider = document.getElementById('worldSlider');
+	// worldTextbox = document.getElementById('worldTextbox');
 	gripperSlider = document.getElementById('gripperSlider');
 	gripperTextbox = document.getElementById('gripperTextbox');
 	speedSlider = document.getElementById('speedSlider');
@@ -38,17 +38,17 @@ function getUIElement() {
 	resetButton.addEventListener('click', resetAnimation);
 
 	// Event listener for world Scale
-	worldSlider.addEventListener('input', function () {
-		worldTextbox.value = parseFloat(worldSlider.value);
-		worldScale = parseFloat(worldSlider.value) / 10;
-		render();
-	})
+	// worldSlider.addEventListener('input', function () {
+	// 	worldTextbox.value = parseFloat(worldSlider.value);
+	// 	worldScale = parseFloat(worldSlider.value) / 10;
+	// 	render();
+	// })
 
-	worldTextbox.addEventListener('input', function () {
-		worldSlider.value = parseFloat(worldTextbox.value);
-		worldScale = parseFloat(worldSlider.value) / 10;
-		render();
-	})
+	// worldTextbox.addEventListener('input', function () {
+	// 	worldSlider.value = parseFloat(worldTextbox.value);
+	// 	worldScale = parseFloat(worldSlider.value) / 10;
+	// 	render();
+	// })
 
 	// Event listener for gripper
 	gripperSlider.addEventListener('input', function () {
@@ -361,8 +361,8 @@ function resetAnimation() {
 	worldScale = worldScaleInit;
 	
 	// Reset all UI elements to initial state
-	worldSlider.value = worldScaleInit * 10;
-	worldTextbox.value = worldScaleInit * 10;
+	// worldSlider.value = worldScaleInit * 10;
+	// worldTextbox.value = worldScaleInit * 10;
 	gripperSlider.value = gripperRotationDefault + 20;
 	gripperTextbox.value = gripperRotationDefault + 20;
 	speedSlider.value = initialSpeed;

@@ -21,7 +21,7 @@ setupBackdrop = function() {
     backdropStart = points.length;
     // Create a single plane (quadrilateral = 2 triangles)
     // Using color index 5 (Dark Green)
-    quadrilateral([0, 1, 2, 3], 5, backdropWall);
+    quadrilateral([0, 1, 2, 3], 6, backdropWall);
     quadrilateral([0, 1, 2, 3], 0, backdropFloor);
     backdropCount = points.length - backdropStart;
 }
