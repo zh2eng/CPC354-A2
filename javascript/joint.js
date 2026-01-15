@@ -69,7 +69,7 @@ setupJoint = function() {
         triangle([i, i-1, baseSegments+2], 1, base)
     }
     for(let i = baseSegments+1; i > 0; i--){
-        quadrilateral([i, i-1, i+baseSegments+1, i+baseSegments+2], 2, base)
+        quadrilateral([i, i-1, i+baseSegments+1, i+baseSegments+2], 6, base)
     }
 
     // Hook at the front
@@ -86,7 +86,7 @@ setupJoint = function() {
     quadrilateral([2*baseSegments+4,2*baseSegments+hookSegments+10,2*baseSegments+hookSegments+13,2*baseSegments+7], 2, base)
     quadrilateral([2*baseSegments+5,2*baseSegments+hookSegments+11,2*baseSegments+hookSegments+12,2*baseSegments+6], 2, base)
     for(let i = 2*baseSegments+hookSegments+9; i > 2*baseSegments+9; i--){
-        quadrilateral([i, i-1, i+hookSegments+5, i+hookSegments+6], 2, base)
+        quadrilateral([i, i-1, i+hookSegments+5, i+hookSegments+6], 6, base)
     }
     
 
@@ -105,7 +105,7 @@ setupJoint = function() {
     quadrilateral([2*baseSegments+2*hookSegments+16,2*baseSegments+3*hookSegments+22,2*baseSegments+3*hookSegments+25,2*baseSegments+2*hookSegments+19], 2, base)
     quadrilateral([2*baseSegments+2*hookSegments+17,2*baseSegments+3*hookSegments+23,2*baseSegments+3*hookSegments+24,2*baseSegments+2*hookSegments+18], 2, base)
     for(let i = 2*baseSegments+3*hookSegments+21; i > 2*baseSegments+2*hookSegments+16; i--){
-        quadrilateral([i, i-1, i+hookSegments+5, i+hookSegments+6], 2, base)
+        quadrilateral([i, i-1, i+hookSegments+5, i+hookSegments+6], 6, base)
     }
 
     jointCount = points.length - jointStart;

@@ -8,10 +8,6 @@
 	height: min-content;
 }
 
-#gl-canvas {
-	padding-bottom: 1rem;
-}
-
 .canvas,
 #gl-canvas {
 	width: 96%;
@@ -92,3 +88,53 @@ h1 {
 	z-index: 10;
 	/* display: none; Hidden by default */
 }
+
+.keybinding-instructions{
+	display: flex;
+	padding-left: 2rem;
+	gap: 1rem;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-bottom: 1rem;
+}
+
+.keybinding-instructions > h2{
+	margin: 0;
+	font-size: 1.3rem;
+}
+
+.keybinding-instructions ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	align-items: center;
+}
+
+.keybinding-instructions li {
+	background-color: #505050;
+	color: #ffffff;
+	border-radius: 0.4rem;
+	padding: 0.2rem 0.5rem;
+	font-size: 0.95rem;
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	border: 1px solid #555555;
+}
+
+/* .keybinding-instructions li strong {
+	background-color: #0414c5;
+	color: white;
+	padding: 0.2rem 0.5rem;
+	border-radius: 0.3rem;
+	font-weight: bold;
+	min-width: 1.5rem;
+	text-align: center;
+} */
+
+/* .keybinding-instructions li span{
+
+} */

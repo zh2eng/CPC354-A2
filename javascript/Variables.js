@@ -41,6 +41,7 @@ var armStart, armCount;
 var jointStart, jointCount;
 var gripperStart, gripperCount;
 var cubeStart, cubeCount;
+var backdropStart, backdropCount;
 
 var stack = [];
 
@@ -50,7 +51,9 @@ var newColors = [
     vec4(0.45, 0.45, 0.45, 1.0), // Dark Silver
     vec4(0.0, 0.0, 1.0, 1.0), // Blue
     vec4(0.15, 0.15, 0.35, 1.0), // Charcoal Blue
-    vec4(0.75, 0.75, 0.75, 1.0) // Standard Silver
+    vec4(0.75, 0.75, 0.75, 1.0), // Standard Silver
+    vec4(0.1, 0.35, 0.1, 1.0), // Dark Green
+    vec4(0.4, 0.6, 0.9, 1.0), // Dark Blue
 ];
 
 // Constant for initial translation values
@@ -116,8 +119,9 @@ const liftAngleMiddle = 30;
 const liftAngleUpper = 30;
 
 // Variable for position of cube and robot
-const robotPosition = [0, -8, -50];
-const cubePositionInit = [14, -8, -50];
+const floorPosition = -8;
+const robotPosition = [0, floorPosition, -50];
+const cubePositionInit = [14, floorPosition, -50];
 var cubePosition = [...cubePositionInit];
 
 /*************************************************************************************/

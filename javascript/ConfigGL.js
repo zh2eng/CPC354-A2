@@ -8,6 +8,7 @@ window.onload = function init() {
     setupArm();
     setupGripper();
     setupCube();
+    setupBackdrop();
     // WebGL setups
     getUIElement();
     configWebGL();
@@ -69,13 +70,14 @@ function configWebGL() {
 
 // Render the graphics for viewing
 function render() {
-    if(animFrame){
+    if (animFrame) {
         cancelAnimationFrame(animFrame);
     }
     // Pass a perspective projection matrix to the shader
     // projectionMatrix = orthogonal(-10, 10, -12, 12, 0.1, 100);
     projectionMatrix = perspective(45, canvas.width / canvas.height, 0.1, 100);
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
     //updates lightning
     gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"), flatten(lightAmbient));
     gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"), flatten(lightDiffuse));
@@ -90,21 +92,21 @@ animUpdate = function () {
     // Clear the color buffer and the depth buffer before rendering a new frame
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // Draw backdrop first using a model view matrix
+    modelViewMatrix = mat4();
+    modelViewMatrix = mult(modelViewMatrix, translate(robotPosition[0], robotPosition[1], robotPosition[2]));
+    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
+    drawBackdrop();
+
     // Create the model view matrix
     modelViewMatrix = mat4();
     modelViewMatrix = mult(modelViewMatrix, translate(robotPosition[0], robotPosition[1], robotPosition[2]));
     modelViewMatrix = mult(modelViewMatrix, rotateY(baseRotation));
     modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
 
-    if(doAnimation){
+
+    if (doAnimation)
         animate();
-    } else{
-        // Function scope: Only for manual gripping when not animating
-        // Dynamically set isGripping based on arm orientation and cube position
-        gripCubeOutOfAnimation();
-        // Animate cube falling
-        // animateCubeFalling();
-    }
 
     // If gripping, show notification
     // Implemented here to avoid redundant code in animUpdate and animate functions
@@ -161,12 +163,12 @@ setupRobotArm = function () {
 }
 
 setUpCube = function () {
-    if(isGripping){
+    if (isGripping) {
         // translate the cube to be in front of the gripper
         // using the model view matrix from the robot arm
         modelViewMatrix = mult(modelViewMatrix, translate(0, -8, 0));
         modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation));
-    } else{
+    } else {
         // Use cubePosition and default orientation when not gripping
         modelViewMatrix = mat4();
         modelViewMatrix = mult(modelViewMatrix, translate(cubePosition[0], cubePosition[1], cubePosition[2]));

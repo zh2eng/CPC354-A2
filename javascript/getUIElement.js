@@ -162,19 +162,19 @@ function getUIElement() {
 				break;
 		}
 	});
+	
 	//helper for lightning
 	function resetLighttoDefault(isPoint){
 		lightPosition = vec4(53.0, 39.0, -10.0, isPoint ? 1.0 : 0.0);
 		lightAmbient = vec4(1.0, 1.0, 1.0, 1.0);
-
 		sliderLightX.value = 53;   
 		textboxLightX.value = 53;
     sliderLightY.value = 39; 
 		textboxLightY.value = 39;
     sliderLightZ.value = -10;   
 		textboxLightZ.value = -10;
-    sliderAmbient.value = 1;  
-		textboxAmbient.value = 1;
+    sliderAmbient.value = 1.0;  
+		textboxAmbient.value = 1.0;
 		render();
 	}
   // Event listener for ligtning settings
@@ -252,14 +252,14 @@ function getUIElement() {
 				armRadio[1].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				lowerArmRotation -= 1;
+				lowerArmRotation += 1;
 				armSlider.value = lowerArmRotation;
 				armTextbox.value = lowerArmRotation;
 				break;
 			case '2':
 				// move lower arm right
 				armRadio[1].checked = true;
-				lowerArmRotation += 1;
+				lowerArmRotation -= 1;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
 				armSlider.value = lowerArmRotation;
@@ -270,7 +270,7 @@ function getUIElement() {
 				armRadio[2].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				middleArmRotation -= 1;
+				middleArmRotation += 1;
 				armSlider.value = middleArmRotation;
 				armTextbox.value = middleArmRotation;
 				break;
@@ -279,7 +279,7 @@ function getUIElement() {
 				armRadio[2].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				middleArmRotation += 1;
+				middleArmRotation -= 1;
 				armSlider.value = middleArmRotation;
 				armTextbox.value = middleArmRotation;
 				break;
@@ -288,7 +288,7 @@ function getUIElement() {
 				armRadio[3].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				upperArmRotation -= 1;
+				upperArmRotation += 1;
 				armSlider.value = upperArmRotation;
 				armTextbox.value = upperArmRotation;
 				break;
@@ -297,18 +297,18 @@ function getUIElement() {
 				armRadio[3].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				upperArmRotation += 1;
+				upperArmRotation -= 1;
 				armSlider.value = upperArmRotation;
 				armTextbox.value = upperArmRotation;
 				break;
 			case '9':
-				// open gripper
+				// close gripper
 				gripperRotation += 1;
 				gripperSlider.value = gripperRotation + 20;
 				gripperTextbox.value = gripperRotation + 20;
 				break;
 			case '6':
-				// close gripper
+				// open gripper
 				gripperRotation -= 1;
 				gripperSlider.value = gripperRotation + 20;
 				gripperTextbox.value = gripperRotation + 20;
@@ -320,7 +320,6 @@ function getUIElement() {
 
 function startAnimation() {
 	doAnimation = !doAnimation;
-	isGripping = false; // reset gripping state when starting/stopping animation
 	if (doAnimation) {
 		toggleButton.innerHTML = '<span>&#9724;</span> Stop';
 		toggleButton.className = 'base-btn stop-btn';
@@ -373,8 +372,8 @@ function resetAnimation() {
 	jointSlider.value = baseRotationDefault;
 	jointTextbox.value = baseRotationDefault;
 
-  sliderAmbient.value = 1;
-  textboxAmbient.value = 1;
+  sliderAmbient.value = 1.0;
+  textboxAmbient.value = 1.0;
   sliderLightX.value = 53;
   textboxLightX.value = 53;
   sliderLightY.value = 39;
@@ -382,7 +381,6 @@ function resetAnimation() {
   sliderLightZ.value = -10;
   textboxLightZ.value = -10;
   lightPosition = vec4(53.0, 39.0, -10.0, 1.0);
-  lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
 	document.getElementById("pointLight").checked = true;
 	menus.style.display = 'block';
 

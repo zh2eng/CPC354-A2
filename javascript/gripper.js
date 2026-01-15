@@ -28,12 +28,12 @@ setupGripper = function() {
     triangle([11,8,9,10], 0, gripper);
 
     // Side
-    quadrilateral([0,6,7,1], 2, gripper);
-    quadrilateral([1,7,8,2], 2, gripper);
-    quadrilateral([2,8,9,3], 2, gripper);
-    quadrilateral([3,9,10,4], 2, gripper);
-    quadrilateral([4,10,11,5], 2, gripper);
-    quadrilateral([5,11,6,0], 2, gripper);
+    quadrilateral([0,6,7,1], 6, gripper);
+    quadrilateral([1,7,8,2], 6, gripper);
+    quadrilateral([2,8,9,3], 6, gripper);
+    quadrilateral([3,9,10,4], 6, gripper);
+    quadrilateral([4,10,11,5], 6, gripper);
+    quadrilateral([5,11,6,0], 6, gripper);
 
     gripperCount = points.length - gripperStart;
 
