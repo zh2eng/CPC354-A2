@@ -383,7 +383,6 @@ function resetAnimation() {
   textboxLightZ.value = -10;
 	lightAmbient = vec4(1.0, 1.0, 1.0, 1.0);
   lightPosition = vec4(53.0, 39.0, -10.0, 1.0);
-  lightPosition = vec4(0.0, 100.0, 0.0, 1.0);
 	document.getElementById("pointLight").checked = true;
 	menus.style.display = 'block';
 
