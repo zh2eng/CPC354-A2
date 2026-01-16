@@ -98,28 +98,24 @@ animUpdate = function () {
     modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
     drawBackdrop();
 
-    // Create the model view matrix
-    modelViewMatrix = mat4();
-    modelViewMatrix = mult(modelViewMatrix, translate(robotPosition[0], robotPosition[1], robotPosition[2]));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(baseRotation));
-    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
-
-
     if (doAnimation)
         animate();
 
     // If gripping, show notification
-    // Implemented here to avoid redundant code in animUpdate and animate functions
     grippedNotif.style.display = isGripping ? 'block' : 'none';
 
     setupRobotArm();
     setUpCube();
 
-    // doAnimation does not need to be true to keep animating the cube falling 
     animFrame = requestAnimationFrame(animUpdate);
 }
 
 setupRobotArm = function () {
+    // New model view matrix for robot arm
+    modelViewMatrix = mat4();
+    modelViewMatrix = mult(modelViewMatrix, translate(robotPosition[0], robotPosition[1], robotPosition[2]));
+    modelViewMatrix = mult(modelViewMatrix, rotateY(baseRotation));
+    modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale))
     drawJoint();
 
     // === LOWER ARM ===

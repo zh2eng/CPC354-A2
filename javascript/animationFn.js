@@ -1,9 +1,8 @@
-// One must imagine Sisyphus happy.
 function animate() {
   const scaledSpeed = 0.25 * speed;
   switch (animSeq) {
     case 0:
-      // Rotate all joints into position and open the gripper
+      // Rotate all joints into position (over the cube) and open the gripper
       const upperJointSign = Math.sign(upperJoint - upperArmRotation);
       const middleJointSign = Math.sign(middleJoint - middleArmRotation);
       const lowerJointSign = Math.sign(lowerJoint - lowerArmRotation);
@@ -59,8 +58,8 @@ function animate() {
 
     case 1:
       // Close grippers, mark cube as gripped
-      if (gripperRotation > gripperPosition + speed) {
-        gripperRotation -= speed;
+      if (gripperRotation < gripperPosition - speed) {
+        gripperRotation += speed;
       } else {
         gripperRotation = gripperPosition;
         isGripping = true;
@@ -139,9 +138,9 @@ function animate() {
       break;
 
     case 6:
-      // Open grippers, mark cube as released
-      if (gripperRotation > -30 + 2 * scaledSpeed) {
-        gripperRotation -= 2 * scaledSpeed;
+      // Open grippers
+      if (gripperRotation > -30 + speed) {
+        gripperRotation -= speed;
       } else {
         gripperRotation = -30;
         animSeq++;
@@ -201,7 +200,6 @@ function animate() {
 
 function updateCubePosition() {
   const angleRad = cubeDestinations[cubeAtIdx] * (Math.PI / 180);
-
 
   const centerX = robotPosition[0];
   const centerZ = robotPosition[2];
