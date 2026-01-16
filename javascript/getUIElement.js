@@ -252,14 +252,16 @@ function getUIElement() {
 				armRadio[1].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				lowerArmRotation += 1;
+				if(lowerArmRotation < 110)
+					lowerArmRotation += 1;
 				armSlider.value = lowerArmRotation;
 				armTextbox.value = lowerArmRotation;
 				break;
 			case '2':
 				// move lower arm right
 				armRadio[1].checked = true;
-				lowerArmRotation -= 1;
+				if(lowerArmRotation > -110)
+					lowerArmRotation -= 1;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
 				armSlider.value = lowerArmRotation;
@@ -270,7 +272,8 @@ function getUIElement() {
 				armRadio[2].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				middleArmRotation += 1;
+				if(middleArmRotation < 110)
+					middleArmRotation += 1;
 				armSlider.value = middleArmRotation;
 				armTextbox.value = middleArmRotation;
 				break;
@@ -279,7 +282,8 @@ function getUIElement() {
 				armRadio[2].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				middleArmRotation -= 1;
+				if(middleArmRotation > -110)
+					middleArmRotation -= 1;
 				armSlider.value = middleArmRotation;
 				armTextbox.value = middleArmRotation;
 				break;
@@ -288,7 +292,8 @@ function getUIElement() {
 				armRadio[3].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				upperArmRotation += 1;
+				if(upperArmRotation < 110)
+					upperArmRotation += 1;
 				armSlider.value = upperArmRotation;
 				armTextbox.value = upperArmRotation;
 				break;
@@ -297,19 +302,22 @@ function getUIElement() {
 				armRadio[3].checked = true;
 				armLabel.style.display = 'block';
 				jointLabel.style.display = 'none';
-				upperArmRotation -= 1;
+				if(upperArmRotation > -110)
+					upperArmRotation -= 1;
 				armSlider.value = upperArmRotation;
 				armTextbox.value = upperArmRotation;
 				break;
 			case '9':
 				// close gripper
-				gripperRotation += 1;
+				if(gripperRotation < 35)
+					gripperRotation += 1;
 				gripperSlider.value = gripperRotation + 20;
 				gripperTextbox.value = gripperRotation + 20;
 				break;
 			case '6':
 				// open gripper
-				gripperRotation -= 1;
+				if(gripperRotation > 0)
+					gripperRotation -= 1;
 				gripperSlider.value = gripperRotation + 20;
 				gripperTextbox.value = gripperRotation + 20;
 				break;

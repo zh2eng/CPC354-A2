@@ -64,7 +64,6 @@ function animate() {
       } else {
         gripperRotation = gripperPosition;
         isGripping = true;
-        cubeAtIdx = (cubeAtIdx + 1) % cubeDestinations.length; // Update to next cube position
         animSeq++;
       }
       break;
@@ -89,19 +88,20 @@ function animate() {
       if (lowerArmRotation === lowerJoint + liftAngleLower &&
         middleArmRotation === middleJoint + liftAngleMiddle &&
         upperArmRotation === upperJoint + liftAngleUpper) {
-        cubeAngle = -180
+        cubeAtIdx = (cubeAtIdx + 1) % cubeDestinations.length; // Update to next cube position
+        nextCubeAngle = cubeDestinations[cubeAtIdx] === 0 ? -360 : cubeDestinations[cubeAtIdx];
         animSeq++;
       }
       break;
 
     case 3:
       // Rotate to face drop-off location on the other side
-      cubeAngle = cubeDestinations[cubeAtIdx] === 0 ? -360 : cubeDestinations[cubeAtIdx];
-      if (Math.abs(cubeAngle - baseRotation) <= speed) {
-        baseRotation = cubeAngle === -360 ? 0 : cubeAngle;
+      if (Math.abs(nextCubeAngle - baseRotation) <= speed) {
+        // translate -360 to 0 for consistency
+        baseRotation = nextCubeAngle === -360 ? 0 : nextCubeAngle;
         animSeq++;
       } else {
-        baseRotation -= speed * Math.sign(baseRotation - cubeAngle);
+        baseRotation -= speed * Math.sign(baseRotation - nextCubeAngle);
       }
 
       break;
@@ -133,6 +133,7 @@ function animate() {
     case 5:
       // Minor case: for setting isGripping, cubeAngle and cubePosition
       isGripping = false;
+      cubeAngle = nextCubeAngle === -360 ? 0 : nextCubeAngle;
       updateCubePosition();
       animSeq++;
       break;

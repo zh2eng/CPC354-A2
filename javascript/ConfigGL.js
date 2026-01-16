@@ -167,13 +167,12 @@ setUpCube = function () {
         // translate the cube to be in front of the gripper
         // using the model view matrix from the robot arm
         modelViewMatrix = mult(modelViewMatrix, translate(0, -8, 0));
-        modelViewMatrix = mult(modelViewMatrix, rotateY(upperArmRotation));
     } else {
         // Use cubePosition and default orientation when not gripping
         modelViewMatrix = mat4();
         modelViewMatrix = mult(modelViewMatrix, translate(cubePosition[0], cubePosition[1], cubePosition[2]));
         modelViewMatrix = mult(modelViewMatrix, rotateX(0));
-        modelViewMatrix = mult(modelViewMatrix, rotateY(0));
+        modelViewMatrix = mult(modelViewMatrix, rotateY(cubeAngle));
         modelViewMatrix = mult(modelViewMatrix, scalem(worldScale, worldScale, worldScale));
     }
     drawCube();
