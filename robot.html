@@ -69,9 +69,11 @@
                 //compute lighting terms
                 vec4 ambient = ambientProduct;
 
+                // diffuse light
                 float Kd = max(dot(L,N), 0.0);
                 vec4 diffuse = Kd * diffuseProduct;
 
+                //specular light
                 float Ks = pow(max(dot(N,H), 0.0), shininess);
                 vec4 specular = Ks * specularProduct;
 
