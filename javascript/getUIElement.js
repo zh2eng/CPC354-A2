@@ -376,6 +376,7 @@ function resetAnimation() {
 	speedSlider.value = initialSpeed;
 	speedTextbox.value = initialSpeed;
 	armRadio[0].checked = true;
+	armRadio[0].dispatchEvent(new Event('change')); // Trigger change event to update UI
 	cubePosition = [...cubePositionInit];
 	jointSlider.value = baseRotationDefault;
 	jointTextbox.value = baseRotationDefault;

@@ -136,7 +136,7 @@ var animFrame; // variable to store the animation frame ID
 var cubeAtIdx = 0; // current cube position
 const cubeDestinationsInit = [0, -90, -180, -270]; // initial possible cube positions
 var cubeDestinations = [...cubeDestinationsInit]; 
-var cubeAngle = cubeDestinationsInit[0]; // current cube angle
-var nextCubeAngle; // next cube angle after current animation
+var cubeAngle = cubeDestinationsInit[0]; // for rotating cube when not gripped
+var cubeDropoffLocation; // cube dropoff location
 var timeoutHolder; // to hold timeout for pause
 

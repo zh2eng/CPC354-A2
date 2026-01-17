@@ -87,20 +87,24 @@ function animate() {
       if (lowerArmRotation === lowerJoint + liftAngleLower &&
         middleArmRotation === middleJoint + liftAngleMiddle &&
         upperArmRotation === upperJoint + liftAngleUpper) {
-        cubeAtIdx = (cubeAtIdx + 1) % cubeDestinations.length; // Update to next cube position
-        nextCubeAngle = cubeDestinations[cubeAtIdx] === 0 ? -360 : cubeDestinations[cubeAtIdx];
+        // Update cube location pointer to next cube position
+        cubeAtIdx = (cubeAtIdx + 1) % cubeDestinations.length; 
+        // Store the next cube position inside cubeDropoffLocation, for use in case 3
+        // -360 is used to represent 0 to allow robot arm to complete full rotation
+        // by subtracting until it reaches -360
+        cubeDropoffLocation = cubeDestinations[cubeAtIdx] === 0 ? -360 : cubeDestinations[cubeAtIdx];
         animSeq++;
       }
       break;
 
     case 3:
       // Rotate to face drop-off location on the other side
-      if (Math.abs(nextCubeAngle - baseRotation) <= speed) {
-        // translate -360 to 0 for consistency
-        baseRotation = nextCubeAngle === -360 ? 0 : nextCubeAngle;
+      if (Math.abs(cubeDropoffLocation - baseRotation) <= speed) {
+        // translate -360 back to 0 
+        baseRotation = cubeDropoffLocation === -360 ? 0 : cubeDropoffLocation;
         animSeq++;
       } else {
-        baseRotation -= speed * Math.sign(baseRotation - nextCubeAngle);
+        baseRotation -= speed * Math.sign(baseRotation - cubeDropoffLocation);
       }
 
       break;
@@ -132,7 +136,8 @@ function animate() {
     case 5:
       // Minor case: for setting isGripping, cubeAngle and cubePosition
       isGripping = false;
-      cubeAngle = nextCubeAngle === -360 ? 0 : nextCubeAngle;
+      // cube angle (rotation of cube) is correlated with cube dropoff location (baseRotation)
+      cubeAngle = baseRotation
       updateCubePosition();
       animSeq++;
       break;
